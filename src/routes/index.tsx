@@ -3,22 +3,34 @@ import { useState } from "react";
 import {
   Activity,
   ArrowRight,
+  BarChart3,
   BellRing,
   Brain,
+  Building2,
+  CheckCircle2,
+  Code2,
+  Cpu,
   Database,
   Gauge,
   GitBranch,
   Globe2,
+  HandCoins,
+  HeartHandshake,
   Layers,
   LineChart,
   Lock,
   Map,
+  Network,
   Repeat,
   Scale,
   Search,
+  ShieldAlert,
   ShieldCheck,
   Sparkles,
+  TrendingUp,
+  UserCheck,
   Workflow,
+  Zap,
 } from "lucide-react";
 import { HeroMap } from "@/components/lv/HeroMap";
 import { DemoTag, Panel } from "@/components/lv/panels";
@@ -28,20 +40,20 @@ import { STAGES } from "@/lib/lv/types";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "LandVision AI — Predict Land Acquisition Delays Before They Happen" },
+      { title: "LandVision AI — Predictive Analytics System for Early Detection of Land Acquisition Delays" },
       {
         name: "description",
         content:
-          "LandVision AI predicts land acquisition delays, explains risk drivers, maps parcels on GIS and recommends interventions for government authorities.",
+          "AI-powered decision-support platform for early land acquisition delay prediction, SHAP explainability, cadastral GIS mapping, and closed-loop administrative interventions.",
       },
       {
         property: "og:title",
-        content: "LandVision AI — Predictive Land Acquisition Intelligence",
+        content: "LandVision AI — Smart India Hackathon (SIH) Predictive Decision Support",
       },
       {
         property: "og:description",
         content:
-          "Predict delays. Identify bottlenecks. Prioritize intervention. Accelerate infrastructure.",
+          "Predict delays. Uncover bottlenecks. Prioritize interventions. Accelerate national infrastructure delivery.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -51,83 +63,87 @@ export const Route = createFileRoute("/")({
 });
 
 const NAV = [
-  { label: "How It Works", href: "#how-it-works" },
+  { label: "Pipeline", href: "#pipeline" },
+  { label: "Lifecycle", href: "#lifecycle" },
   { label: "Features", href: "#features" },
   { label: "Intelligence", href: "#intelligence" },
   { label: "GIS", href: "#gis" },
-  { label: "About", href: "#about" },
+  { label: "SIH Methodology", to: "/public/methodology" },
+  { label: "Impact", to: "/public/impact" },
+  { label: "Public Portal", to: "/public" },
 ];
 
 const METRICS = [
-  { label: "Projects monitored", value: 1248 },
-  { label: "High-risk projects", value: 184 },
-  { label: "Maximum predicted risk", value: 82, suffix: "%" },
-  { label: "Active interventions", value: 23 },
+  { label: "Corridors Monitored", value: 1248 },
+  { label: "High/Critical Risk Corridors", value: 184 },
+  { label: "Peak Delay Risk Index", value: 82, suffix: "%" },
+  { label: "Active Interventions", value: 23 },
 ];
 
 const STEPS = [
-  { n: "01", title: "Collect", icon: Database, text: "Project, land, compensation, approval, legal and R&R data." },
-  { n: "02", title: "Analyze", icon: Search, text: "AI analyses historical and current acquisition patterns." },
-  { n: "03", title: "Predict", icon: Gauge, text: "ML estimates the probability of future delay." },
-  { n: "04", title: "Explain", icon: Brain, text: "Explainable AI identifies the major risk contributors." },
-  { n: "05", title: "Recommend", icon: Sparkles, text: "The system suggests prioritised corrective actions." },
-  { n: "06", title: "Monitor", icon: Activity, text: "Officials track interventions and project progress." },
-  { n: "07", title: "Learn", icon: Repeat, text: "New outcomes can improve future model versions." },
+  { n: "01", title: "Data Telemetry", icon: Database, text: "Ingests cadastral, compensation, legal, approval & R&R records." },
+  { n: "02", title: "AI/ML Prediction", icon: Gauge, text: "XGBoost & Random Forest ensemble computes delay risk & slippage days." },
+  { n: "03", title: "Explainable AI", icon: Brain, text: "SHAP attribution pinpoints top 5 bottleneck drivers & percentage shares." },
+  { n: "04", title: "GIS Mapping", icon: Map, text: "Cadastral parcels, corridor buffers, and dispute heatmaps rendered on GIS." },
+  { n: "05", title: "Early Alert", icon: BellRing, text: "Automated threshold breaches alert responsible revenue & project officers." },
+  { n: "06", title: "Officer Action", icon: UserCheck, text: "Field intervention assigned with deadline & departmental routing." },
+  { n: "07", title: "Risk Recalculation", icon: TrendingUp, text: "Closed-loop engine recalculates risk score after field resolution." },
+  { n: "08", title: "Continuous Learning", icon: Repeat, text: "MLOps pipeline retrains on ground-truth outcomes to boost accuracy." },
 ];
 
 const STAGE_DETAIL: Record<string, { desc: string; bottleneck: string; indicator: string }> = {
   Notification: {
-    desc: "Section 11 notification issued and published for the proposed acquisition.",
-    bottleneck: "Delayed gazette publication and incomplete village schedules.",
-    indicator: "Approvals pending at the revenue department.",
+    desc: "Section 11 preliminary notification issued and gazette published for proposed alignment.",
+    bottleneck: "Delayed gazette publication and incomplete revenue village schedules.",
+    indicator: "Approvals pending at State Revenue Cell beyond 30-day SLA.",
   },
   Survey: {
-    desc: "Field survey, demarcation and measurement of affected parcels.",
-    bottleneck: "Survey team shortages and inaccessible parcels.",
-    indicator: "Documentation completeness below 70%.",
+    desc: "Cadastral field survey, joint demarcation and measurement of affected land parcels.",
+    bottleneck: "Survey team shortages, inaccessible terrain and missing boundary records.",
+    indicator: "Documentation & RoR verification below 70%.",
   },
   Valuation: {
-    desc: "Market value determination and preparation of the award statement.",
-    bottleneck: "Disputed market rates and outdated circle rates.",
-    indicator: "Objections filed against valuation.",
+    desc: "Determination of market value, multiplier factor, and preparation of draft award statement.",
+    bottleneck: "Disputed circle rates and outdated registered transaction baselines.",
+    indicator: "Objections filed before District Valuation Committee.",
   },
   Compensation: {
-    desc: "Award declaration and disbursement of compensation to landowners.",
-    bottleneck: "Bank verification failures and unresolved title records.",
-    indicator: "Disbursement stalled beyond 30 days.",
+    desc: "Statutory award declaration and direct benefit transfer (DBT) disbursement to landholders.",
+    bottleneck: "Stalled bank accounts, unlinked Aadhaar/PAN and disputed co-sharer titles.",
+    indicator: "Disbursal stalled beyond 45-day statutory timeline.",
   },
   "Legal Resolution": {
-    desc: "Resolution of objections, appeals and title litigation.",
-    bottleneck: "Court backlogs and multiple claimants on a single parcel.",
-    indicator: "Open dispute count rising month over month.",
+    desc: "Adjudication of Section 64 reference petitions, High Court writ petitions, and stay motions.",
+    bottleneck: "Court backlogs, multiple heirship claimants and stayed possession orders.",
+    indicator: "Active dispute count rising quarter over quarter.",
   },
   "Rehabilitation & Resettlement": {
-    desc: "Entitlement delivery, resettlement sites and livelihood restoration.",
-    bottleneck: "Site readiness and family entitlement verification.",
-    indicator: "R&R completion lagging compensation progress.",
+    desc: "Execution of R&R scheme, civic infrastructure at resettlement colonies, and livelihood grants.",
+    bottleneck: "Colony site readiness, contractor delays, and family entitlement verification.",
+    indicator: "R&R completion lagging compensation progress by >40%.",
   },
   Possession: {
-    desc: "Physical possession handed over to the implementing agency.",
-    bottleneck: "Encroachment removal and structure valuation disputes.",
-    indicator: "Possession percentage far below compensation percentage.",
+    desc: "Physical land possession handed over from Revenue Authorities to Executing Agency.",
+    bottleneck: "Encroachment removal, standing crop compensation and law-and-order issues.",
+    indicator: "Possession percentage significantly trailing awarded compensation.",
   },
   Completion: {
-    desc: "Acquisition closure, records updated and land transferred.",
-    bottleneck: "Pending mutation entries and audit closure.",
-    indicator: "Residual parcels outstanding.",
+    desc: "Final acquisition closure, land title mutation in favor of Government, and audit sign-off.",
+    bottleneck: "Pending Tehsil mutation entries and residual escrow reconciliations.",
+    indicator: "Residual contested parcels preventing commercial construction start.",
   },
 };
 
 const FEATURES = [
-  { icon: LineChart, title: "Predictive Delay Analytics", text: "Identify projects likely to experience delays before schedules slip." },
-  { icon: Gauge, title: "Dynamic Risk Scoring", text: "Generate project-level risk scores that update as data changes." },
-  { icon: Brain, title: "Explainable AI", text: "Understand why each prediction occurred, factor by factor.", ai: true },
-  { icon: Layers, title: "Stage-wise Risk", text: "Pinpoint which acquisition stage is driving the delay risk." },
-  { icon: Map, title: "GIS Intelligence", text: "See risk geographically at parcel, district and state level." },
-  { icon: BellRing, title: "Smart Alerts", text: "Notify responsible officials when conditions deteriorate." },
-  { icon: Sparkles, title: "AI Recommendations", text: "Receive prioritised corrective interventions.", ai: true },
-  { icon: Repeat, title: "Continuous Learning", text: "Retrain on new outcomes to improve future accuracy." },
-  { icon: ShieldCheck, title: "Secure Governance", text: "Role-based access control and complete audit trails." },
+  { icon: LineChart, title: "Predictive Delay Risk Analytics", text: "Multi-parameter ML forecasts delay probability and expected slippage months.", link: "/app/predictor" },
+  { icon: Scale, title: "Explainable AI (XAI)", text: "SHAP-style attribution waterfall & plain language governance summaries.", link: "/app/explainable-ai" },
+  { icon: Map, title: "Geospatial GIS Intelligence", text: "Parcel-level cadastral outlines, buffer layers, and interactive hotspot heatmaps.", link: "/app/gis" },
+  { icon: Workflow, title: "8-Stage Lifecycle Timeline", text: "Track milestones from Sec 11 to Possession with stage bottleneck detection.", link: "/app/timeline" },
+  { icon: Building2, title: "District & State Hotspots", text: "Hierarchical analytics across 12 Indian states and high-risk districts.", link: "/app/district-analytics" },
+  { icon: ShieldAlert, title: "Legal Litigation Docket", text: "Track Section 64 petitions, stay orders, and court resolution timelines.", link: "/app/legal" },
+  { icon: HandCoins, title: "Compensation Disbursal (DBT)", text: "Monitor award payouts, payment velocity, and stalled bank accounts.", link: "/app/compensation" },
+  { icon: UserCheck, title: "Intervention Recalculation", text: "Assign corrective actions to officers and track live before/after risk drops.", link: "/app/interventions" },
+  { icon: Repeat, title: "Continuous Learning MLOps", text: "Simulate automated retraining cycles with semantic model versioning.", link: "/app/continuous-learning" },
 ];
 
 function Landing() {
@@ -136,6 +152,7 @@ function Landing() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* HEADER */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2">
@@ -143,29 +160,43 @@ function Landing() {
             <span className="font-display text-sm font-bold tracking-widest text-foreground">
               LANDVISION AI
             </span>
+            <span className="hidden rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary sm:inline">
+              SIH Edition
+            </span>
           </Link>
-          <nav className="hidden items-center gap-6 lg:flex">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                {n.label}
-              </a>
-            ))}
-            <Link to="/public" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-              Public Projects
-            </Link>
+          <nav className="hidden items-center gap-5 lg:flex">
+            {NAV.map((n) =>
+              n.to ? (
+                <Link
+                  key={n.label}
+                  to={n.to}
+                  className="text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {n.label}
+                </Link>
+              ) : (
+                <a
+                  key={n.label}
+                  href={n.href}
+                  className="text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {n.label}
+                </a>
+              ),
+            )}
           </nav>
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card"
+              className="rounded-md border border-border px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-card"
             >
-              Login
+              Officer Login
             </Link>
             <Link
               to="/app/dashboard"
-              className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[var(--shadow-glow)]"
+              className="rounded-md bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground shadow-sm hover:shadow-[var(--shadow-glow)]"
             >
-              Explore Platform
+              Command Center →
             </Link>
           </div>
         </div>
@@ -174,37 +205,42 @@ function Landing() {
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="grid-backdrop pointer-events-none absolute inset-0 opacity-40" aria-hidden />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:py-24">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:py-20">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-              <Sparkles className="size-3.5 text-ai" aria-hidden />
-              Predictive governance for land acquisition
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+              <Sparkles className="size-3.5" aria-hidden />
+              AI Decision-Support System for Infrastructure Delivery
             </span>
             <h1 className="mt-5 font-display text-4xl leading-tight font-bold text-foreground sm:text-5xl">
               Predicting Land Acquisition Delays{" "}
               <span className="ai-gradient-text">Before They Happen.</span>
             </h1>
-            <p className="mt-5 max-w-xl text-base text-muted-foreground">
-              LandVision AI uses predictive analytics, explainable AI and geospatial intelligence to
-              identify high-risk land acquisition projects, uncover bottlenecks and help authorities
-              intervene before delays impact infrastructure delivery.
+            <p className="mt-5 max-w-xl text-sm text-muted-foreground leading-relaxed">
+              LandVision AI combines multi-parameter predictive analytics, transparent SHAP explainability, and cadastral GIS
+              intelligence to uncover bottlenecks and empower government authorities to intervene before delays derail critical infrastructure projects.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 to="/app/dashboard"
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[var(--shadow-glow)]"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-bold text-primary-foreground shadow-lg transition-shadow hover:shadow-[var(--shadow-glow)]"
               >
-                Explore Dashboard <ArrowRight className="size-4" aria-hidden />
+                Launch National Command Center <ArrowRight className="size-4" aria-hidden />
               </Link>
-              <a
-                href="#how-it-works"
-                className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+              <Link
+                to="/app/predictor"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-xs font-bold text-foreground transition-colors hover:bg-accent"
               >
-                See How It Works
-              </a>
+                <Zap className="size-4 text-primary" /> Test AI Predictor Sandbox
+              </Link>
+              <Link
+                to="/public/methodology"
+                className="inline-flex items-center gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-xs font-medium text-muted-foreground hover:text-foreground"
+              >
+                SIH Methodology Specs →
+              </Link>
             </div>
-            <p className="mt-5 text-xs tracking-wide text-muted-foreground uppercase">
-              Predict delays · Identify bottlenecks · Prioritize intervention · Accelerate infrastructure
+            <p className="mt-6 text-[11px] tracking-wide text-muted-foreground uppercase">
+              DATA → AI/ML → DELAY PREDICTION → RISK SCORE → EXPLAINABLE AI → ROOT CAUSE → GIS → ALERT → INTERVENTION → CONTINUOUS LEARNING
             </p>
           </div>
           <div className="flex justify-center lg:justify-end">
@@ -212,72 +248,37 @@ function Landing() {
           </div>
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 pb-14 sm:px-6">
+        {/* METRICS ROW */}
+        <div className="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {METRICS.map((m) => (
               <Metric key={m.label} {...m} />
             ))}
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">
-            <DemoTag /> Values shown are demonstration figures generated from a synthetic dataset.
-          </p>
-        </div>
-      </section>
-
-      {/* BEFORE / AFTER */}
-      <section className="border-b border-border bg-surface">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-          <SectionHead
-            eyebrow="The shift"
-            title="From reactive monitoring to predictive governance"
-            text="LandVision AI moves authorities from discovering problems after they occur to anticipating them and acting first."
-          />
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            <Panel className="border-border/70">
-              <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">Before</p>
-              <h3 className="mt-2 font-display text-xl font-semibold text-foreground">Reactive monitoring</h3>
-              <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                {["Problem happens", "Officer discovers it", "Action"].map((s, i) => (
-                  <span key={s} className="flex items-center gap-2">
-                    <span className="rounded-md border border-border bg-background px-3 py-1.5">{s}</span>
-                    {i < 2 ? <ArrowRight className="size-3.5" aria-hidden /> : null}
-                  </span>
-                ))}
-              </div>
-            </Panel>
-            <Panel className="border-primary/40">
-              <p className="text-xs font-semibold tracking-widest text-primary uppercase">After</p>
-              <h3 className="mt-2 font-display text-xl font-semibold text-foreground">Predictive governance</h3>
-              <div className="mt-6 flex flex-wrap items-center gap-2 text-sm">
-                {["Data", "AI predicts risk", "Explain", "Recommend", "Intervene", "Monitor"].map((s, i, arr) => (
-                  <span key={s} className="flex items-center gap-2">
-                    <span className="rounded-md border border-primary/30 bg-background px-3 py-1.5 text-foreground">
-                      {s}
-                    </span>
-                    {i < arr.length - 1 ? <ArrowRight className="size-3.5 text-primary" aria-hidden /> : null}
-                  </span>
-                ))}
-              </div>
-            </Panel>
+          <div className="mt-4 flex items-center justify-between">
+            <DemoTag />
+            <span className="text-[11px] text-muted-foreground">
+              Simulated multi-state dataset of 1,248 active corridors.
+            </span>
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section id="how-it-works" className="border-b border-border">
+      {/* PIPELINE ARCHITECTURE (DATA -> AI -> XAI -> INTERVENTION) */}
+      <section id="pipeline" className="border-b border-border bg-surface">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
           <SectionHead
-            eyebrow="How it works"
-            title="Data → AI → Risk → Explanation → Action → Monitoring → Learning"
-            text="A single closed intelligence loop across the acquisition lifecycle."
+            eyebrow="Closed-Loop Intelligence"
+            title="The 8-Stage End-to-End Governance Pipeline"
+            text="How LandVision AI transforms fragmented administrative telemetry into measurable delay reductions."
           />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s) => (
               <Panel key={s.n} className="group relative overflow-hidden">
                 <span className="font-display text-xs font-bold tracking-widest text-primary">{s.n}</span>
                 <s.icon className="mt-3 size-5 text-primary" aria-hidden />
-                <h3 className="mt-3 font-display text-base font-semibold text-foreground">{s.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{s.text}</p>
+                <h3 className="mt-3 font-display text-sm font-bold text-foreground">{s.title}</h3>
+                <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">{s.text}</p>
                 <span className="absolute inset-x-0 bottom-0 h-px bg-primary/0 transition-colors group-hover:bg-primary/60" />
               </Panel>
             ))}
@@ -285,17 +286,17 @@ function Landing() {
         </div>
       </section>
 
-      {/* LIFECYCLE */}
-      <section className="border-b border-border bg-surface">
+      {/* 8-STAGE LIFECYCLE INTERACTIVE EXPLORER */}
+      <section id="lifecycle" className="border-b border-border">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
           <SectionHead
-            eyebrow="Land acquisition lifecycle"
-            title="Eight stages, each with its own failure modes"
-            text="Select a stage to see typical bottlenecks and the indicators the model watches."
+            eyebrow="Land Acquisition Lifecycle"
+            title="Eight Critical Milestones, Each With Unique Failure Modes"
+            text="Select a stage to explore typical bottlenecks and the indicators monitored by the AI prediction model."
           />
           <div className="mt-10 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-            <div className="panel p-5">
-              <ol className="space-y-2">
+            <div className="panel p-4">
+              <ol className="space-y-1.5">
                 {STAGES.map((s, i) => {
                   const activeStage = s === stage;
                   return (
@@ -303,20 +304,20 @@ function Landing() {
                       <button
                         onClick={() => setStage(s)}
                         aria-pressed={activeStage}
-                        className={`flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${
+                        className={`flex w-full items-center gap-3 rounded-lg border px-3 py-2 text-left text-xs transition-colors ${
                           activeStage
-                            ? "border-primary/50 bg-background text-foreground"
+                            ? "border-primary bg-primary/10 text-foreground font-bold shadow-2xs"
                             : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
                         }`}
                       >
                         <span
-                          className={`grid size-6 shrink-0 place-items-center rounded-md border text-[11px] font-semibold ${
-                            activeStage ? "border-primary text-primary" : "border-border"
+                          className={`grid size-6 shrink-0 place-items-center rounded-md border text-[11px] font-bold ${
+                            activeStage ? "border-primary bg-primary text-primary-foreground" : "border-border"
                           }`}
                         >
                           {i + 1}
                         </span>
-                        {s}
+                        <span>{s}</span>
                         {activeStage ? <ArrowRight className="ml-auto size-4 text-primary" aria-hidden /> : null}
                       </button>
                     </li>
@@ -324,17 +325,20 @@ function Landing() {
                 })}
               </ol>
             </div>
-            <Panel>
-              <h3 className="font-display text-lg font-semibold text-foreground">{stage}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{detail.desc}</p>
-              <div className="mt-5 space-y-4 text-sm">
-                <div>
-                  <p className="text-xs tracking-widest text-muted-foreground uppercase">Typical bottleneck</p>
-                  <p className="mt-1 text-foreground">{detail.bottleneck}</p>
+            <Panel className="border-primary/40 bg-card">
+              <span className="rounded bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary uppercase">
+                Milestone Deep-Dive
+              </span>
+              <h3 className="mt-2 font-display text-lg font-bold text-foreground">{stage}</h3>
+              <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{detail.desc}</p>
+              <div className="mt-5 space-y-3.5 text-xs">
+                <div className="rounded-lg border border-border bg-surface p-3">
+                  <p className="text-[10px] font-bold tracking-widest text-risk-critical uppercase">Typical Bottleneck</p>
+                  <p className="mt-1 text-foreground font-medium">{detail.bottleneck}</p>
                 </div>
-                <div>
-                  <p className="text-xs tracking-widest text-muted-foreground uppercase">Risk indicator</p>
-                  <p className="mt-1 text-foreground">{detail.indicator}</p>
+                <div className="rounded-lg border border-border bg-surface p-3">
+                  <p className="text-[10px] font-bold tracking-widest text-primary uppercase">AI Risk Indicator</p>
+                  <p className="mt-1 text-foreground font-medium">{detail.indicator}</p>
                 </div>
               </div>
             </Panel>
@@ -342,124 +346,39 @@ function Landing() {
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section id="features" className="border-b border-border">
+      {/* COMPREHENSIVE PLATFORM CAPABILITIES */}
+      <section id="features" className="border-b border-border bg-surface">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
           <SectionHead
-            eyebrow="Platform modules"
-            title="An analytical command centre, not a dashboard"
-            text="Nine capability modules covering prediction, explanation, geography and governance."
+            eyebrow="Platform Modules"
+            title="Complete 32-Requirement Decision-Support Suite"
+            text="Engineered for Smart India Hackathon: prediction sandboxes, explainability, GIS layers, and closed-loop governance."
           />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f) => (
-              <Panel key={f.title} className="transition-transform hover:-translate-y-0.5">
-                <span
-                  className={`grid size-10 place-items-center rounded-lg border border-border ${
-                    f.ai ? "ai-gradient-bg text-ai-foreground" : "bg-background text-primary"
-                  }`}
-                >
-                  <f.icon className="size-5" aria-hidden />
-                </span>
-                <h3 className="mt-4 font-display text-base font-semibold text-foreground">{f.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{f.text}</p>
-              </Panel>
+              <Link
+                key={f.title}
+                to={f.link}
+                className="panel p-5 transition-transform hover:-translate-y-1 hover:border-primary/50 group block"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="grid size-9 place-items-center rounded-lg bg-primary/10 text-primary border border-primary/20">
+                    <f.icon className="size-4.5" aria-hidden />
+                  </span>
+                  <ArrowRight className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <h3 className="mt-4 font-display text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                  {f.title}
+                </h3>
+                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{f.text}</p>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* INTELLIGENCE */}
-      <section id="intelligence" className="border-b border-border bg-surface">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2">
-          <div>
-            <SectionHead
-              eyebrow="AI intelligence"
-              title="Every prediction comes with its explanation"
-              text="The model estimates probability — never certainty — and always shows the contributing factors."
-            />
-            <ul className="mt-8 space-y-3">
-              {[
-                { icon: Workflow, t: "Stage-wise delay probabilities across all eight stages" },
-                { icon: Scale, t: "SHAP-style factor attribution for each risk score" },
-                { icon: GitBranch, t: "Recommended interventions ranked by priority and impact" },
-                { icon: Lock, t: "Role-based access and full audit trail on every change" },
-              ].map((x) => (
-                <li key={x.t} className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <x.icon className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
-                  {x.t}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <Panel className="relative overflow-hidden">
-            <div className="absolute inset-x-0 top-0 h-1 ai-gradient-bg" aria-hidden />
-            <p className="text-xs tracking-widest text-muted-foreground uppercase">Sample AI insight</p>
-            <p className="mt-3 font-display text-lg text-foreground">
-              The model estimates an <span className="text-risk-critical">82% probability of delay</span> for
-              NH-16 Expansion over the next 90 days.
-            </p>
-            <div className="mt-5 space-y-3">
-              {[
-                { label: "Legal disputes", v: 24 },
-                { label: "Compensation delay", v: 21 },
-                { label: "Pending approvals", v: 15 },
-                { label: "Documentation", v: 12 },
-                { label: "R&R progress", v: 8 },
-              ].map((f) => (
-                <div key={f.label}>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-muted-foreground">{f.label}</span>
-                    <span className="text-foreground tabular-nums">{f.v}%</span>
-                  </div>
-                  <div className="mt-1 h-1.5 rounded-full bg-background">
-                    <div className="h-full rounded-full ai-gradient-bg" style={{ width: `${f.v * 3}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="mt-5 text-xs text-muted-foreground">
-              <DemoTag /> Generated from the synthetic demonstration dataset.
-            </p>
-          </Panel>
-        </div>
-      </section>
-
-      {/* GIS */}
-      <section id="gis" className="border-b border-border">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2">
-          <div className="order-2 lg:order-1">
-            <SectionHead
-              eyebrow="GIS intelligence"
-              title="Where is the land, and where is the risk?"
-              text="Cadastral parcels, acquisition boundaries, infrastructure corridors and risk overlays on a single live geospatial canvas."
-            />
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              {[
-                "Parcel-level cadastral outlines",
-                "Project acquisition boundaries",
-                "Infrastructure corridor overlays",
-                "Risk heatmap and layer switching",
-              ].map((t) => (
-                <div key={t} className="rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-muted-foreground">
-                  {t}
-                </div>
-              ))}
-            </div>
-            <Link
-              to="/app/gis"
-              className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[var(--shadow-glow)]"
-            >
-              Open GIS Risk Map <ArrowRight className="size-4" aria-hidden />
-            </Link>
-          </div>
-          <div className="order-1 flex justify-center lg:order-2">
-            <HeroMap />
-          </div>
-        </div>
-      </section>
-
-      {/* ABOUT + FOOTER */}
-      <footer id="about" className="bg-surface">
+      {/* FOOTER */}
+      <footer id="about" className="bg-background border-t border-border">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4">
           <div>
             <div className="flex items-center gap-2">
@@ -468,43 +387,52 @@ function Landing() {
                 LANDVISION AI
               </span>
             </div>
-            <p className="mt-3 text-sm text-muted-foreground">
-              An AI-powered early-warning and decision-support platform for land acquisition delay
-              prediction, root-cause explanation and intervention tracking.
+            <p className="mt-3 text-xs text-muted-foreground leading-relaxed">
+              Predictive analytics system for early detection of land acquisition delays. Developed for Smart India Hackathon (SIH).
             </p>
-            <p className="mt-3 text-xs text-muted-foreground">
-              Demonstration build. All figures are synthetic and not official government data.
+            <p className="mt-3 text-[11px] text-muted-foreground">
+              Demonstration build. All figures are synthetic simulation data.
             </p>
           </div>
           <FooterCol
-            title="Platform"
+            title="Governance Modules"
             links={[
-              { label: "Government Portal", to: "/app/dashboard" },
-              { label: "Public Portal", to: "/public" },
-              { label: "GIS Risk Map", to: "/app/gis" },
-              { label: "AI Insights", to: "/app/insights" },
+              { label: "Command Center Dashboard", to: "/app/dashboard" },
+              { label: "AI Delay Risk Predictor", to: "/app/predictor" },
+              { label: "Explainable AI (XAI)", to: "/app/explainable-ai" },
+              { label: "GIS Cadastral Map", to: "/app/gis" },
+              { label: "8-Stage Timeline Bottlenecks", to: "/app/timeline" },
+              { label: "District Analytics", to: "/app/district-analytics" },
+              { label: "National State Analytics", to: "/app/state-analytics" },
             ]}
           />
           <FooterCol
-            title="Resources"
+            title="Domain & Governance"
             links={[
-              { label: "Public Notices", to: "/public/notices" },
-              { label: "Public Statistics", to: "/public/statistics" },
-              { label: "About", to: "/public/about" },
+              { label: "Legal Disputes Docket", to: "/app/legal" },
+              { label: "Compensation Tracking (DBT)", to: "/app/compensation" },
+              { label: "Documentation Compliance", to: "/app/documentation" },
+              { label: "Administrative Bottlenecks", to: "/app/bottlenecks" },
+              { label: "R&R Resettlement Tracking", to: "/app/rr" },
+              { label: "Land Possession & Encroachments", to: "/app/possession" },
+              { label: "Stakeholder Responsiveness Index", to: "/app/stakeholders" },
+              { label: "Intervention Management", to: "/app/interventions" },
             ]}
           />
-          <div>
-            <p className="font-display text-sm font-semibold text-foreground">Privacy, Security & Contact</p>
-            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li>Role-based access control</li>
-              <li>Audit-logged administrative actions</li>
-              <li>No personal landowner data exposed publicly</li>
-              <li>contact@landvision.demo</li>
-            </ul>
-          </div>
+          <FooterCol
+            title="SIH Specifications & Public"
+            links={[
+              { label: "SIH Technical Methodology", to: "/public/methodology" },
+              { label: "Governance Impact Assessment", to: "/public/impact" },
+              { label: "Continuous Learning MLOps", to: "/app/continuous-learning" },
+              { label: "API Gateway Architecture", to: "/app/api-center" },
+              { label: "Public Citizen Portal", to: "/public" },
+              { label: "Government Officer Login", to: "/login" },
+            ]}
+          />
         </div>
         <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">
-          LandVision AI — demonstration platform for Smart India Hackathon evaluation.
+          LandVision AI — Smart India Hackathon (SIH) Predictive Decision-Support Platform.
         </div>
       </footer>
     </div>
@@ -514,8 +442,8 @@ function Landing() {
 function FooterCol({ title, links }: { title: string; links: { label: string; to: string }[] }) {
   return (
     <div>
-      <p className="font-display text-sm font-semibold text-foreground">{title}</p>
-      <ul className="mt-3 space-y-2 text-sm">
+      <p className="font-display text-xs font-bold text-foreground uppercase tracking-wider">{title}</p>
+      <ul className="mt-3 space-y-1.5 text-xs">
         {links.map((l) => (
           <li key={l.to}>
             <Link to={l.to} className="text-muted-foreground transition-colors hover:text-foreground">
@@ -531,9 +459,9 @@ function FooterCol({ title, links }: { title: string; links: { label: string; to
 function SectionHead({ eyebrow, title, text }: { eyebrow: string; title: string; text: string }) {
   return (
     <div className="max-w-2xl">
-      <p className="text-xs font-semibold tracking-widest text-primary uppercase">{eyebrow}</p>
-      <h2 className="mt-3 font-display text-3xl font-bold text-foreground">{title}</h2>
-      <p className="mt-3 text-sm text-muted-foreground">{text}</p>
+      <p className="text-xs font-bold tracking-widest text-primary uppercase">{eyebrow}</p>
+      <h2 className="mt-2 font-display text-2xl font-bold text-foreground sm:text-3xl">{title}</h2>
+      <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{text}</p>
     </div>
   );
 }
@@ -541,12 +469,12 @@ function SectionHead({ eyebrow, title, text }: { eyebrow: string; title: string;
 function Metric({ label, value, suffix }: { label: string; value: number; suffix?: string }) {
   const n = useCountUp(value, 1200);
   return (
-    <div className="panel p-5">
-      <p className="font-display text-3xl font-bold text-foreground tabular-nums">
+    <div className="panel p-4">
+      <p className="font-display text-2xl font-bold text-foreground tabular-nums">
         {n.toLocaleString("en-IN")}
         {suffix ?? ""}
       </p>
-      <p className="mt-1 text-xs tracking-wide text-muted-foreground uppercase">{label}</p>
+      <p className="mt-1 text-[11px] tracking-wide text-muted-foreground uppercase">{label}</p>
     </div>
   );
 }

@@ -16,18 +16,37 @@ import { Route as PublicRouteImport } from './routes/public'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAlertsRouteImport } from './routes/app.alerts'
 import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
+import { Route as AppApiCenterRouteImport } from './routes/app.api-center'
 import { Route as AppAuditRouteImport } from './routes/app.audit'
+import { Route as AppBottlenecksRouteImport } from './routes/app.bottlenecks'
+import { Route as AppCompareRouteImport } from './routes/app.compare'
+import { Route as AppCompensationRouteImport } from './routes/app.compensation'
+import { Route as AppContinuousLearningRouteImport } from './routes/app.continuous-learning'
 import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
 import { Route as AppDataRouteImport } from './routes/app.data'
+import { Route as AppDistrictAnalyticsRouteImport } from './routes/app.district-analytics'
+import { Route as AppDocumentationRouteImport } from './routes/app.documentation'
+import { Route as AppExplainableAiRouteImport } from './routes/app.explainable-ai'
 import { Route as AppGisRouteImport } from './routes/app.gis'
 import { Route as AppInsightsRouteImport } from './routes/app.insights'
+import { Route as AppInterventionsRouteImport } from './routes/app.interventions'
+import { Route as AppLandPriceRouteImport } from './routes/app.land-price'
+import { Route as AppLegalRouteImport } from './routes/app.legal'
 import { Route as AppModelRouteImport } from './routes/app.model'
+import { Route as AppPossessionRouteImport } from './routes/app.possession'
+import { Route as AppPredictorRouteImport } from './routes/app.predictor'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
+import { Route as AppRrRouteImport } from './routes/app.rr'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppStakeholdersRouteImport } from './routes/app.stakeholders'
+import { Route as AppStateAnalyticsRouteImport } from './routes/app.state-analytics'
+import { Route as AppTimelineRouteImport } from './routes/app.timeline'
 import { Route as AppUsersRouteImport } from './routes/app.users'
 import { Route as PublicIndexRouteImport } from './routes/public.index'
 import { Route as PublicAboutRouteImport } from './routes/public.about'
+import { Route as PublicImpactRouteImport } from './routes/public.impact'
 import { Route as PublicMapRouteImport } from './routes/public.map'
+import { Route as PublicMethodologyRouteImport } from './routes/public.methodology'
 import { Route as PublicNoticesRouteImport } from './routes/public.notices'
 import { Route as PublicStatisticsRouteImport } from './routes/public.statistics'
 import { Route as AppProjectsIndexRouteImport } from './routes/app.projects.index'
@@ -71,9 +90,34 @@ const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AppRoute,
 } as any)
+const AppApiCenterRoute = AppApiCenterRouteImport.update({
+  id: '/api-center',
+  path: '/api-center',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAuditRoute = AppAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBottlenecksRoute = AppBottlenecksRouteImport.update({
+  id: '/bottlenecks',
+  path: '/bottlenecks',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCompareRoute = AppCompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCompensationRoute = AppCompensationRouteImport.update({
+  id: '/compensation',
+  path: '/compensation',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppContinuousLearningRoute = AppContinuousLearningRouteImport.update({
+  id: '/continuous-learning',
+  path: '/continuous-learning',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -86,6 +130,21 @@ const AppDataRoute = AppDataRouteImport.update({
   path: '/data',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDistrictAnalyticsRoute = AppDistrictAnalyticsRouteImport.update({
+  id: '/district-analytics',
+  path: '/district-analytics',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDocumentationRoute = AppDocumentationRouteImport.update({
+  id: '/documentation',
+  path: '/documentation',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppExplainableAiRoute = AppExplainableAiRouteImport.update({
+  id: '/explainable-ai',
+  path: '/explainable-ai',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppGisRoute = AppGisRouteImport.update({
   id: '/gis',
   path: '/gis',
@@ -96,9 +155,34 @@ const AppInsightsRoute = AppInsightsRouteImport.update({
   path: '/insights',
   getParentRoute: () => AppRoute,
 } as any)
+const AppInterventionsRoute = AppInterventionsRouteImport.update({
+  id: '/interventions',
+  path: '/interventions',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLandPriceRoute = AppLandPriceRouteImport.update({
+  id: '/land-price',
+  path: '/land-price',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLegalRoute = AppLegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppModelRoute = AppModelRouteImport.update({
   id: '/model',
   path: '/model',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPossessionRoute = AppPossessionRouteImport.update({
+  id: '/possession',
+  path: '/possession',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPredictorRoute = AppPredictorRouteImport.update({
+  id: '/predictor',
+  path: '/predictor',
   getParentRoute: () => AppRoute,
 } as any)
 const AppReportsRoute = AppReportsRouteImport.update({
@@ -106,9 +190,29 @@ const AppReportsRoute = AppReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRrRoute = AppRrRouteImport.update({
+  id: '/rr',
+  path: '/rr',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStakeholdersRoute = AppStakeholdersRouteImport.update({
+  id: '/stakeholders',
+  path: '/stakeholders',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStateAnalyticsRoute = AppStateAnalyticsRouteImport.update({
+  id: '/state-analytics',
+  path: '/state-analytics',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTimelineRoute = AppTimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
   getParentRoute: () => AppRoute,
 } as any)
 const AppUsersRoute = AppUsersRouteImport.update({
@@ -126,9 +230,19 @@ const PublicAboutRoute = PublicAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicImpactRoute = PublicImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => PublicRoute,
+} as any)
 const PublicMapRoute = PublicMapRouteImport.update({
   id: '/map',
   path: '/map',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicMethodologyRoute = PublicMethodologyRouteImport.update({
+  id: '/methodology',
+  path: '/methodology',
   getParentRoute: () => PublicRoute,
 } as any)
 const PublicNoticesRoute = PublicNoticesRouteImport.update({
@@ -174,17 +288,36 @@ export interface FileRoutesByFullPath {
   '/public': typeof PublicRouteWithChildren
   '/app/alerts': typeof AppAlertsRoute
   '/app/analytics': typeof AppAnalyticsRoute
+  '/app/api-center': typeof AppApiCenterRoute
   '/app/audit': typeof AppAuditRoute
+  '/app/bottlenecks': typeof AppBottlenecksRoute
+  '/app/compare': typeof AppCompareRoute
+  '/app/compensation': typeof AppCompensationRoute
+  '/app/continuous-learning': typeof AppContinuousLearningRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/data': typeof AppDataRoute
+  '/app/district-analytics': typeof AppDistrictAnalyticsRoute
+  '/app/documentation': typeof AppDocumentationRoute
+  '/app/explainable-ai': typeof AppExplainableAiRoute
   '/app/gis': typeof AppGisRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/interventions': typeof AppInterventionsRoute
+  '/app/land-price': typeof AppLandPriceRoute
+  '/app/legal': typeof AppLegalRoute
   '/app/model': typeof AppModelRoute
+  '/app/possession': typeof AppPossessionRoute
+  '/app/predictor': typeof AppPredictorRoute
   '/app/reports': typeof AppReportsRoute
+  '/app/rr': typeof AppRrRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/stakeholders': typeof AppStakeholdersRoute
+  '/app/state-analytics': typeof AppStateAnalyticsRoute
+  '/app/timeline': typeof AppTimelineRoute
   '/app/users': typeof AppUsersRoute
   '/public/about': typeof PublicAboutRoute
+  '/public/impact': typeof PublicImpactRoute
   '/public/map': typeof PublicMapRoute
+  '/public/methodology': typeof PublicMethodologyRoute
   '/public/notices': typeof PublicNoticesRoute
   '/public/statistics': typeof PublicStatisticsRoute
   '/app/': typeof AppIndexRoute
@@ -200,17 +333,36 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/analytics': typeof AppAnalyticsRoute
+  '/app/api-center': typeof AppApiCenterRoute
   '/app/audit': typeof AppAuditRoute
+  '/app/bottlenecks': typeof AppBottlenecksRoute
+  '/app/compare': typeof AppCompareRoute
+  '/app/compensation': typeof AppCompensationRoute
+  '/app/continuous-learning': typeof AppContinuousLearningRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/data': typeof AppDataRoute
+  '/app/district-analytics': typeof AppDistrictAnalyticsRoute
+  '/app/documentation': typeof AppDocumentationRoute
+  '/app/explainable-ai': typeof AppExplainableAiRoute
   '/app/gis': typeof AppGisRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/interventions': typeof AppInterventionsRoute
+  '/app/land-price': typeof AppLandPriceRoute
+  '/app/legal': typeof AppLegalRoute
   '/app/model': typeof AppModelRoute
+  '/app/possession': typeof AppPossessionRoute
+  '/app/predictor': typeof AppPredictorRoute
   '/app/reports': typeof AppReportsRoute
+  '/app/rr': typeof AppRrRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/stakeholders': typeof AppStakeholdersRoute
+  '/app/state-analytics': typeof AppStateAnalyticsRoute
+  '/app/timeline': typeof AppTimelineRoute
   '/app/users': typeof AppUsersRoute
   '/public/about': typeof PublicAboutRoute
+  '/public/impact': typeof PublicImpactRoute
   '/public/map': typeof PublicMapRoute
+  '/public/methodology': typeof PublicMethodologyRoute
   '/public/notices': typeof PublicNoticesRoute
   '/public/statistics': typeof PublicStatisticsRoute
   '/app': typeof AppIndexRoute
@@ -229,17 +381,36 @@ export interface FileRoutesById {
   '/public': typeof PublicRouteWithChildren
   '/app/alerts': typeof AppAlertsRoute
   '/app/analytics': typeof AppAnalyticsRoute
+  '/app/api-center': typeof AppApiCenterRoute
   '/app/audit': typeof AppAuditRoute
+  '/app/bottlenecks': typeof AppBottlenecksRoute
+  '/app/compare': typeof AppCompareRoute
+  '/app/compensation': typeof AppCompensationRoute
+  '/app/continuous-learning': typeof AppContinuousLearningRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/data': typeof AppDataRoute
+  '/app/district-analytics': typeof AppDistrictAnalyticsRoute
+  '/app/documentation': typeof AppDocumentationRoute
+  '/app/explainable-ai': typeof AppExplainableAiRoute
   '/app/gis': typeof AppGisRoute
   '/app/insights': typeof AppInsightsRoute
+  '/app/interventions': typeof AppInterventionsRoute
+  '/app/land-price': typeof AppLandPriceRoute
+  '/app/legal': typeof AppLegalRoute
   '/app/model': typeof AppModelRoute
+  '/app/possession': typeof AppPossessionRoute
+  '/app/predictor': typeof AppPredictorRoute
   '/app/reports': typeof AppReportsRoute
+  '/app/rr': typeof AppRrRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/stakeholders': typeof AppStakeholdersRoute
+  '/app/state-analytics': typeof AppStateAnalyticsRoute
+  '/app/timeline': typeof AppTimelineRoute
   '/app/users': typeof AppUsersRoute
   '/public/about': typeof PublicAboutRoute
+  '/public/impact': typeof PublicImpactRoute
   '/public/map': typeof PublicMapRoute
+  '/public/methodology': typeof PublicMethodologyRoute
   '/public/notices': typeof PublicNoticesRoute
   '/public/statistics': typeof PublicStatisticsRoute
   '/app/': typeof AppIndexRoute
@@ -259,17 +430,36 @@ export interface FileRouteTypes {
     | '/public'
     | '/app/alerts'
     | '/app/analytics'
+    | '/app/api-center'
     | '/app/audit'
+    | '/app/bottlenecks'
+    | '/app/compare'
+    | '/app/compensation'
+    | '/app/continuous-learning'
     | '/app/dashboard'
     | '/app/data'
+    | '/app/district-analytics'
+    | '/app/documentation'
+    | '/app/explainable-ai'
     | '/app/gis'
     | '/app/insights'
+    | '/app/interventions'
+    | '/app/land-price'
+    | '/app/legal'
     | '/app/model'
+    | '/app/possession'
+    | '/app/predictor'
     | '/app/reports'
+    | '/app/rr'
     | '/app/settings'
+    | '/app/stakeholders'
+    | '/app/state-analytics'
+    | '/app/timeline'
     | '/app/users'
     | '/public/about'
+    | '/public/impact'
     | '/public/map'
+    | '/public/methodology'
     | '/public/notices'
     | '/public/statistics'
     | '/app/'
@@ -285,17 +475,36 @@ export interface FileRouteTypes {
     | '/login'
     | '/app/alerts'
     | '/app/analytics'
+    | '/app/api-center'
     | '/app/audit'
+    | '/app/bottlenecks'
+    | '/app/compare'
+    | '/app/compensation'
+    | '/app/continuous-learning'
     | '/app/dashboard'
     | '/app/data'
+    | '/app/district-analytics'
+    | '/app/documentation'
+    | '/app/explainable-ai'
     | '/app/gis'
     | '/app/insights'
+    | '/app/interventions'
+    | '/app/land-price'
+    | '/app/legal'
     | '/app/model'
+    | '/app/possession'
+    | '/app/predictor'
     | '/app/reports'
+    | '/app/rr'
     | '/app/settings'
+    | '/app/stakeholders'
+    | '/app/state-analytics'
+    | '/app/timeline'
     | '/app/users'
     | '/public/about'
+    | '/public/impact'
     | '/public/map'
+    | '/public/methodology'
     | '/public/notices'
     | '/public/statistics'
     | '/app'
@@ -313,17 +522,36 @@ export interface FileRouteTypes {
     | '/public'
     | '/app/alerts'
     | '/app/analytics'
+    | '/app/api-center'
     | '/app/audit'
+    | '/app/bottlenecks'
+    | '/app/compare'
+    | '/app/compensation'
+    | '/app/continuous-learning'
     | '/app/dashboard'
     | '/app/data'
+    | '/app/district-analytics'
+    | '/app/documentation'
+    | '/app/explainable-ai'
     | '/app/gis'
     | '/app/insights'
+    | '/app/interventions'
+    | '/app/land-price'
+    | '/app/legal'
     | '/app/model'
+    | '/app/possession'
+    | '/app/predictor'
     | '/app/reports'
+    | '/app/rr'
     | '/app/settings'
+    | '/app/stakeholders'
+    | '/app/state-analytics'
+    | '/app/timeline'
     | '/app/users'
     | '/public/about'
+    | '/public/impact'
     | '/public/map'
+    | '/public/methodology'
     | '/public/notices'
     | '/public/statistics'
     | '/app/'
@@ -393,11 +621,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/api-center': {
+      id: '/app/api-center'
+      path: '/api-center'
+      fullPath: '/app/api-center'
+      preLoaderRoute: typeof AppApiCenterRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/audit': {
       id: '/app/audit'
       path: '/audit'
       fullPath: '/app/audit'
       preLoaderRoute: typeof AppAuditRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/bottlenecks': {
+      id: '/app/bottlenecks'
+      path: '/bottlenecks'
+      fullPath: '/app/bottlenecks'
+      preLoaderRoute: typeof AppBottlenecksRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/compare': {
+      id: '/app/compare'
+      path: '/compare'
+      fullPath: '/app/compare'
+      preLoaderRoute: typeof AppCompareRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/compensation': {
+      id: '/app/compensation'
+      path: '/compensation'
+      fullPath: '/app/compensation'
+      preLoaderRoute: typeof AppCompensationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/continuous-learning': {
+      id: '/app/continuous-learning'
+      path: '/continuous-learning'
+      fullPath: '/app/continuous-learning'
+      preLoaderRoute: typeof AppContinuousLearningRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/dashboard': {
@@ -414,6 +677,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDataRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/district-analytics': {
+      id: '/app/district-analytics'
+      path: '/district-analytics'
+      fullPath: '/app/district-analytics'
+      preLoaderRoute: typeof AppDistrictAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/documentation': {
+      id: '/app/documentation'
+      path: '/documentation'
+      fullPath: '/app/documentation'
+      preLoaderRoute: typeof AppDocumentationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/explainable-ai': {
+      id: '/app/explainable-ai'
+      path: '/explainable-ai'
+      fullPath: '/app/explainable-ai'
+      preLoaderRoute: typeof AppExplainableAiRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/gis': {
       id: '/app/gis'
       path: '/gis'
@@ -428,11 +712,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInsightsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/interventions': {
+      id: '/app/interventions'
+      path: '/interventions'
+      fullPath: '/app/interventions'
+      preLoaderRoute: typeof AppInterventionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/land-price': {
+      id: '/app/land-price'
+      path: '/land-price'
+      fullPath: '/app/land-price'
+      preLoaderRoute: typeof AppLandPriceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/legal': {
+      id: '/app/legal'
+      path: '/legal'
+      fullPath: '/app/legal'
+      preLoaderRoute: typeof AppLegalRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/model': {
       id: '/app/model'
       path: '/model'
       fullPath: '/app/model'
       preLoaderRoute: typeof AppModelRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/possession': {
+      id: '/app/possession'
+      path: '/possession'
+      fullPath: '/app/possession'
+      preLoaderRoute: typeof AppPossessionRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/predictor': {
+      id: '/app/predictor'
+      path: '/predictor'
+      fullPath: '/app/predictor'
+      preLoaderRoute: typeof AppPredictorRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/reports': {
@@ -442,11 +761,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppReportsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/rr': {
+      id: '/app/rr'
+      path: '/rr'
+      fullPath: '/app/rr'
+      preLoaderRoute: typeof AppRrRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/settings': {
       id: '/app/settings'
       path: '/settings'
       fullPath: '/app/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/stakeholders': {
+      id: '/app/stakeholders'
+      path: '/stakeholders'
+      fullPath: '/app/stakeholders'
+      preLoaderRoute: typeof AppStakeholdersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/state-analytics': {
+      id: '/app/state-analytics'
+      path: '/state-analytics'
+      fullPath: '/app/state-analytics'
+      preLoaderRoute: typeof AppStateAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/timeline': {
+      id: '/app/timeline'
+      path: '/timeline'
+      fullPath: '/app/timeline'
+      preLoaderRoute: typeof AppTimelineRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/users': {
@@ -470,11 +817,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAboutRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/public/impact': {
+      id: '/public/impact'
+      path: '/impact'
+      fullPath: '/public/impact'
+      preLoaderRoute: typeof PublicImpactRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/public/map': {
       id: '/public/map'
       path: '/map'
       fullPath: '/public/map'
       preLoaderRoute: typeof PublicMapRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/public/methodology': {
+      id: '/public/methodology'
+      path: '/methodology'
+      fullPath: '/public/methodology'
+      preLoaderRoute: typeof PublicMethodologyRouteImport
       parentRoute: typeof PublicRoute
     }
     '/public/notices': {
@@ -532,14 +893,31 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAlertsRoute: typeof AppAlertsRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
+  AppApiCenterRoute: typeof AppApiCenterRoute
   AppAuditRoute: typeof AppAuditRoute
+  AppBottlenecksRoute: typeof AppBottlenecksRoute
+  AppCompareRoute: typeof AppCompareRoute
+  AppCompensationRoute: typeof AppCompensationRoute
+  AppContinuousLearningRoute: typeof AppContinuousLearningRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppDataRoute: typeof AppDataRoute
+  AppDistrictAnalyticsRoute: typeof AppDistrictAnalyticsRoute
+  AppDocumentationRoute: typeof AppDocumentationRoute
+  AppExplainableAiRoute: typeof AppExplainableAiRoute
   AppGisRoute: typeof AppGisRoute
   AppInsightsRoute: typeof AppInsightsRoute
+  AppInterventionsRoute: typeof AppInterventionsRoute
+  AppLandPriceRoute: typeof AppLandPriceRoute
+  AppLegalRoute: typeof AppLegalRoute
   AppModelRoute: typeof AppModelRoute
+  AppPossessionRoute: typeof AppPossessionRoute
+  AppPredictorRoute: typeof AppPredictorRoute
   AppReportsRoute: typeof AppReportsRoute
+  AppRrRoute: typeof AppRrRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppStakeholdersRoute: typeof AppStakeholdersRoute
+  AppStateAnalyticsRoute: typeof AppStateAnalyticsRoute
+  AppTimelineRoute: typeof AppTimelineRoute
   AppUsersRoute: typeof AppUsersRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProjectsProjectIdRoute: typeof AppProjectsProjectIdRoute
@@ -550,14 +928,31 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAlertsRoute: AppAlertsRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
+  AppApiCenterRoute: AppApiCenterRoute,
   AppAuditRoute: AppAuditRoute,
+  AppBottlenecksRoute: AppBottlenecksRoute,
+  AppCompareRoute: AppCompareRoute,
+  AppCompensationRoute: AppCompensationRoute,
+  AppContinuousLearningRoute: AppContinuousLearningRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppDataRoute: AppDataRoute,
+  AppDistrictAnalyticsRoute: AppDistrictAnalyticsRoute,
+  AppDocumentationRoute: AppDocumentationRoute,
+  AppExplainableAiRoute: AppExplainableAiRoute,
   AppGisRoute: AppGisRoute,
   AppInsightsRoute: AppInsightsRoute,
+  AppInterventionsRoute: AppInterventionsRoute,
+  AppLandPriceRoute: AppLandPriceRoute,
+  AppLegalRoute: AppLegalRoute,
   AppModelRoute: AppModelRoute,
+  AppPossessionRoute: AppPossessionRoute,
+  AppPredictorRoute: AppPredictorRoute,
   AppReportsRoute: AppReportsRoute,
+  AppRrRoute: AppRrRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppStakeholdersRoute: AppStakeholdersRoute,
+  AppStateAnalyticsRoute: AppStateAnalyticsRoute,
+  AppTimelineRoute: AppTimelineRoute,
   AppUsersRoute: AppUsersRoute,
   AppIndexRoute: AppIndexRoute,
   AppProjectsProjectIdRoute: AppProjectsProjectIdRoute,
@@ -569,7 +964,9 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface PublicRouteChildren {
   PublicAboutRoute: typeof PublicAboutRoute
+  PublicImpactRoute: typeof PublicImpactRoute
   PublicMapRoute: typeof PublicMapRoute
+  PublicMethodologyRoute: typeof PublicMethodologyRoute
   PublicNoticesRoute: typeof PublicNoticesRoute
   PublicStatisticsRoute: typeof PublicStatisticsRoute
   PublicIndexRoute: typeof PublicIndexRoute
@@ -579,7 +976,9 @@ interface PublicRouteChildren {
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicAboutRoute: PublicAboutRoute,
+  PublicImpactRoute: PublicImpactRoute,
   PublicMapRoute: PublicMapRoute,
+  PublicMethodologyRoute: PublicMethodologyRoute,
   PublicNoticesRoute: PublicNoticesRoute,
   PublicStatisticsRoute: PublicStatisticsRoute,
   PublicIndexRoute: PublicIndexRoute,
