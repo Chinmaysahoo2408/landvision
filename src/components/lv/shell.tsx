@@ -9,6 +9,7 @@ import {
   CalendarClock,
   ChevronDown,
   ChevronRight,
+  Cpu,
   Database,
   FileCheck,
   FileSpreadsheet,
@@ -64,6 +65,7 @@ const NAV_GROUPS: NavGroup[] = [
     title: "Command Center",
     items: [
       { to: "/app/dashboard", label: "Overview Dashboard", icon: LayoutDashboard },
+      { to: "/app/ai-prediction", label: "AI Prediction & Training", icon: Brain, badge: "AI Core" },
       { to: "/app/projects", label: "Projects Portfolio", icon: Activity },
       { to: "/app/predictor", label: "AI Delay Predictor", icon: Sparkles },
       { to: "/app/gis", label: "GIS Risk Intelligence", icon: Map },
@@ -114,6 +116,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "Administration",
     items: [
+      { to: "/app/admin-ai", label: "Admin AI / ML Center", icon: Cpu, roles: ["ADMIN"] },
       { to: "/app/users", label: "Users & Roles", icon: Users, roles: ["ADMIN"] },
       { to: "/app/audit", label: "Audit Trails", icon: ScrollText, roles: ["ADMIN"] },
       { to: "/app/settings", label: "System Settings", icon: Settings },

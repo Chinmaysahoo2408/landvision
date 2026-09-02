@@ -14,6 +14,8 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PublicRouteImport } from './routes/public'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppAdminAiRouteImport } from './routes/app.admin-ai'
+import { Route as AppAiPredictionRouteImport } from './routes/app.ai-prediction'
 import { Route as AppAlertsRouteImport } from './routes/app.alerts'
 import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
 import { Route as AppApiCenterRouteImport } from './routes/app.api-center'
@@ -78,6 +80,16 @@ const PublicRoute = PublicRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminAiRoute = AppAdminAiRouteImport.update({
+  id: '/admin-ai',
+  path: '/admin-ai',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAiPredictionRoute = AppAiPredictionRouteImport.update({
+  id: '/ai-prediction',
+  path: '/ai-prediction',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAlertsRoute = AppAlertsRouteImport.update({
@@ -286,6 +298,8 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/public': typeof PublicRouteWithChildren
+  '/app/admin-ai': typeof AppAdminAiRoute
+  '/app/ai-prediction': typeof AppAiPredictionRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/analytics': typeof AppAnalyticsRoute
   '/app/api-center': typeof AppApiCenterRoute
@@ -331,6 +345,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/app/admin-ai': typeof AppAdminAiRoute
+  '/app/ai-prediction': typeof AppAiPredictionRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/analytics': typeof AppAnalyticsRoute
   '/app/api-center': typeof AppApiCenterRoute
@@ -379,6 +395,8 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/public': typeof PublicRouteWithChildren
+  '/app/admin-ai': typeof AppAdminAiRoute
+  '/app/ai-prediction': typeof AppAiPredictionRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/analytics': typeof AppAnalyticsRoute
   '/app/api-center': typeof AppApiCenterRoute
@@ -428,6 +446,8 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/public'
+    | '/app/admin-ai'
+    | '/app/ai-prediction'
     | '/app/alerts'
     | '/app/analytics'
     | '/app/api-center'
@@ -473,6 +493,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/app/admin-ai'
+    | '/app/ai-prediction'
     | '/app/alerts'
     | '/app/analytics'
     | '/app/api-center'
@@ -520,6 +542,8 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/public'
+    | '/app/admin-ai'
+    | '/app/ai-prediction'
     | '/app/alerts'
     | '/app/analytics'
     | '/app/api-center'
@@ -605,6 +629,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/admin-ai': {
+      id: '/app/admin-ai'
+      path: '/admin-ai'
+      fullPath: '/app/admin-ai'
+      preLoaderRoute: typeof AppAdminAiRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/ai-prediction': {
+      id: '/app/ai-prediction'
+      path: '/ai-prediction'
+      fullPath: '/app/ai-prediction'
+      preLoaderRoute: typeof AppAiPredictionRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/alerts': {
@@ -891,6 +929,8 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppAdminAiRoute: typeof AppAdminAiRoute
+  AppAiPredictionRoute: typeof AppAiPredictionRoute
   AppAlertsRoute: typeof AppAlertsRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppApiCenterRoute: typeof AppApiCenterRoute
@@ -926,6 +966,8 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAdminAiRoute: AppAdminAiRoute,
+  AppAiPredictionRoute: AppAiPredictionRoute,
   AppAlertsRoute: AppAlertsRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppApiCenterRoute: AppApiCenterRoute,

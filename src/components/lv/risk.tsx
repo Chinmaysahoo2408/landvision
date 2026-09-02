@@ -47,8 +47,8 @@ export function RiskBadge({
   className,
 }: {
   category: RiskCategory;
-  score?: number;
-  className?: string;
+  score?: number | undefined;
+  className?: string | undefined;
 }) {
   const s = styles[category];
   const Icon = icons[category];

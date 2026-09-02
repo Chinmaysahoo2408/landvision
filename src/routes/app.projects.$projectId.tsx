@@ -295,6 +295,7 @@ function ProjectDetail() {
                       onClick={() => {
                         addIntervention({
                           projectId: project.id,
+                          projectName: project.name,
                           recommendationId: r.id,
                           action: r.action,
                           assignedTo: session?.name ?? "Unassigned",
