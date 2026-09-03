@@ -14,9 +14,7 @@ layer, so unauthorized API calls are rejected regardless of the frontend
 
 ## 1. Install dependencies
 
-The Lovable build package was removed, so the lockfiles are momentarily out of
-sync with `package.json`. Run a normal install to resync — **do not** use
-`npm ci` (it fails on an out-of-sync lockfile):
+Run a normal install to ensure dependencies and lockfiles are up to date:
 
 ```bash
 npm install
