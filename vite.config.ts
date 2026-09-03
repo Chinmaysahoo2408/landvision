@@ -5,6 +5,10 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+const nitroPreset =
+  process.env.NITRO_PRESET ||
+  (process.env.VERCEL ? "vercel" : process.env.CF_PAGES ? "cloudflare-module" : undefined);
+
 export default defineConfig({
   plugins: [
     tanstackStart({
@@ -13,9 +17,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     tsconfigPaths(),
-    nitro({
-      preset: "cloudflare-module",
-    }),
+    nitro(nitroPreset ? { preset: nitroPreset } : {}),
   ],
   resolve: {
     alias: {
