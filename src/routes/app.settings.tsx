@@ -144,11 +144,13 @@ function SettingsPage() {
     setThresholds(draft);
     log({
       user: session?.name ?? "System",
+      role: session?.role ?? "ADMIN",
       action: "Updated risk thresholds",
       entity: "Settings",
       entityId: "risk-thresholds",
       oldValue: `${thresholds.medium}/${thresholds.high}/${thresholds.critical}`,
       newValue: `${draft.medium}/${draft.high}/${draft.critical}`,
+      status: "SUCCESS",
     });
     toast.success("Risk thresholds applied across the platform.");
   };

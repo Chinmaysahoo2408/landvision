@@ -16,6 +16,8 @@ const NAV: PublicNavItem[] = [
   { to: "/public/map", label: "GIS Map" },
   { to: "/public/notices", label: "Notices" },
   { to: "/public/statistics", label: "Statistics" },
+  { to: "/public/methodology", label: "SIH Methodology" },
+  { to: "/public/impact", label: "Impact" },
   { to: "/public/about", label: "About" },
 ];
 
@@ -137,8 +139,10 @@ export function PublicShell({ children }: { children: ReactNode }) {
             ]}
           />
           <PublicFooterCol
-            title="Information"
+            title="SIH Specifications"
             links={[
+              { label: "SIH Methodology", to: "/public/methodology" },
+              { label: "Governance Impact", to: "/public/impact" },
               { label: "Public Notices", to: "/public/notices" },
               { label: "About the platform", to: "/public/about" },
             ]}

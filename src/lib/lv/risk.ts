@@ -4,7 +4,10 @@ import type {
   Recommendation,
   RiskCategory,
   RiskFactor,
+  RiskParameters,
+  Stage,
   StageRisk,
+  StakeholderScores,
   Thresholds,
 } from "./types";
 import { STAGES } from "./types";
@@ -32,181 +35,332 @@ export function riskToken(category: RiskCategory) {
   }
 }
 
+export function riskStyle(category: RiskCategory) {
+  switch (category) {
+    case "LOW":
+      return { stroke: "var(--risk-low)", bg: "color-mix(in oklab, var(--risk-low) 12%, transparent)", text: "var(--risk-low)" };
+    case "MEDIUM":
+      return { stroke: "var(--risk-medium)", bg: "color-mix(in oklab, var(--risk-medium) 12%, transparent)", text: "var(--risk-medium)" };
+    case "HIGH":
+      return { stroke: "var(--risk-high)", bg: "color-mix(in oklab, var(--risk-high) 12%, transparent)", text: "var(--risk-high)" };
+    default:
+      return { stroke: "var(--risk-critical)", bg: "color-mix(in oklab, var(--risk-critical) 12%, transparent)", text: "var(--risk-critical)" };
+  }
+}
+
 const clamp = (n: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, n));
 
-interface Weighted {
+export function computeStakeholderIndex(s: StakeholderScores): number {
+  const sum =
+    s.landowners * 0.25 +
+    s.districtAdmin * 0.2 +
+    s.governmentDepts * 0.18 +
+    s.legalAuthorities * 0.15 +
+    s.rrAuthorities * 0.12 +
+    s.projectAuthorities * 0.1;
+  return Math.round(sum);
+}
+
+interface WeightedFactor {
   key: string;
   label: string;
+  category: RiskFactor["category"];
   weight: number;
   value: number; // 0..1 severity
   detail: string;
 }
 
-function weighted(p: Project): Weighted[] {
-  const q = p.params;
+export function computeWeightedFactors(params: RiskParameters): WeightedFactor[] {
+  const q = params;
+  const stakeholderScore = q.stakeholderBreakdown
+    ? computeStakeholderIndex(q.stakeholderBreakdown)
+    : q.stakeholderResponsiveness;
+
   return [
     {
       key: "legal",
       label: "Legal disputes",
-      weight: 26,
-      value: clamp(q.legalDisputes / 12),
-      detail: `${q.legalDisputes} open disputes, ${q.resolvedDisputes} resolved`,
+      category: "Legal",
+      weight: 24,
+      value: clamp((q.legalDisputes * 1.2 + q.ownershipConflicts * 0.4) / 14),
+      detail: `${q.legalDisputes} open legal cases, ${q.ownershipConflicts} ownership disputes`,
     },
     {
       key: "compensation",
       label: "Compensation delay",
-      weight: 22,
+      category: "Financial",
+      weight: 21,
       value: clamp((100 - q.compensationPct) / 100),
-      detail: `${q.compensationPct}% of compensation disbursed`,
+      detail: `${q.compensationPct}% of compensation disbursed to landowners`,
+    },
+    {
+      key: "possession",
+      label: "Low possession progress",
+      category: "Technical",
+      weight: 15,
+      value: clamp((100 - q.possessionPct) / 100),
+      detail: `${q.possessionPct}% of land handed over to project authority`,
     },
     {
       key: "approvals",
-      label: "Pending approvals",
-      weight: 16,
-      value: clamp(q.pendingApprovals / 9),
-      detail: `${q.pendingApprovals} approvals awaiting clearance`,
+      label: "Approval delay",
+      category: "Administrative",
+      weight: 14,
+      value: clamp((q.approvalDelayDays / 120 + q.pendingApprovals / 8) / 2),
+      detail: `${q.approvalDelayDays} days average approval delay across ${q.pendingApprovals} pending clearances`,
     },
     {
       key: "documentation",
-      label: "Documentation gaps",
-      weight: 13,
+      label: "Documentation issues",
+      category: "Administrative",
+      weight: 10,
       value: clamp((100 - q.documentationPct) / 100),
-      detail: `${q.documentationPct}% of land records verified`,
+      detail: `${q.documentationPct}% of revenue records & titles verified`,
     },
     {
       key: "rr",
-      label: "R&R progress",
-      weight: 10,
+      label: "R&R challenges",
+      category: "Social",
+      weight: 8,
       value: clamp((100 - q.rrPct) / 100),
-      detail: `${q.rrPct}% of affected families rehabilitated`,
+      detail: `${q.rrPct}% of affected families rehabilitated & resettled`,
     },
     {
-      key: "stakeholder",
+      key: "stakeholders",
       label: "Stakeholder responsiveness",
-      weight: 7,
-      value: clamp((100 - q.stakeholderResponsiveness) / 100),
-      detail: `Responsiveness index ${q.stakeholderResponsiveness}/100`,
+      category: "Social",
+      weight: 5,
+      value: clamp((100 - stakeholderScore) / 100),
+      detail: `Composite responsiveness index ${stakeholderScore}/100`,
     },
     {
-      key: "history",
-      label: "Historical administrative performance",
-      weight: 6,
-      value: clamp((100 - q.historicalPerformance) / 100),
-      detail: `District performance index ${q.historicalPerformance}/100`,
+      key: "department",
+      label: "Department coordination",
+      category: "Administrative",
+      weight: 3,
+      value: clamp((100 - q.departmentPerformance) / 100),
+      detail: `Inter-departmental velocity index ${q.departmentPerformance}/100`,
     },
   ];
 }
 
-export function stageRiskFor(p: Project, riskScore: number): StageRisk[] {
-  const q = p.params;
-  const base: Record<string, number> = {
-    Notification: 8 + q.pendingApprovals * 1.2,
-    Survey: 12 + (100 - q.documentationPct) * 0.18,
-    Valuation: 16 + (100 - q.documentationPct) * 0.26,
-    Compensation: 18 + (100 - q.compensationPct) * 0.62,
-    "Legal Resolution": 22 + q.legalDisputes * 5.6 + q.ownershipConflicts * 1.4,
-    "Rehabilitation & Resettlement": 16 + (100 - q.rrPct) * 0.55,
-    Possession: 20 + (100 - q.possessionPct) * 0.5,
-    Completion: 10 + riskScore * 0.55,
+export function computeStageRisks(params: RiskParameters, overallRiskScore: number): StageRisk[] {
+  const q = params;
+  const stakeholderScore = q.stakeholderBreakdown ? computeStakeholderIndex(q.stakeholderBreakdown) : q.stakeholderResponsiveness;
+
+  const base: Record<Stage, { prob: number; delayDays: number }> = {
+    Notification: {
+      prob: 10 + q.pendingNotifications * 7 + (100 - q.departmentPerformance) * 0.2,
+      delayDays: Math.round(15 + q.pendingNotifications * 12),
+    },
+    Survey: {
+      prob: 12 + (100 - q.documentationPct) * 0.35 + (100 - stakeholderScore) * 0.15,
+      delayDays: Math.round(20 + (100 - q.documentationPct) * 0.4),
+    },
+    Valuation: {
+      prob: 15 + (100 - q.documentationPct) * 0.3 + q.ownershipConflicts * 1.5,
+      delayDays: Math.round(25 + q.ownershipConflicts * 3),
+    },
+    Compensation: {
+      prob: 18 + (100 - q.compensationPct) * 0.65 + (100 - stakeholderScore) * 0.15,
+      delayDays: Math.round(30 + (100 - q.compensationPct) * 0.8),
+    },
+    "Legal Resolution": {
+      prob: 22 + q.legalDisputes * 5.8 + q.ownershipConflicts * 1.6,
+      delayDays: Math.round(45 + q.legalDisputes * 9),
+    },
+    "Rehabilitation & Resettlement": {
+      prob: 16 + (100 - q.rrPct) * 0.6 + (100 - stakeholderScore) * 0.2,
+      delayDays: Math.round(28 + (100 - q.rrPct) * 0.7),
+    },
+    Possession: {
+      prob: 20 + (100 - q.possessionPct) * 0.55 + q.legalDisputes * 2.2,
+      delayDays: Math.round(35 + (100 - q.possessionPct) * 0.75),
+    },
+    Completion: {
+      prob: 8 + overallRiskScore * 0.6,
+      delayDays: Math.round(overallRiskScore * 0.9),
+    },
   };
-  return STAGES.map((stage) => {
-    const probability = Math.round(Math.min(97, Math.max(4, base[stage] ?? 10)));
-    return { stage, probability, category: categorize(probability) };
+
+  let maxProb = -1;
+  let bottleneckStage: Stage = "Legal Resolution";
+
+  const stageRisks: StageRisk[] = STAGES.map((stage) => {
+    const raw = base[stage];
+    const probability = Math.round(Math.min(98, Math.max(4, raw.prob)));
+    const daysDelayed = Math.round(raw.delayDays);
+    if (probability > maxProb && stage !== "Completion") {
+      maxProb = probability;
+      bottleneckStage = stage;
+    }
+    return {
+      stage,
+      probability,
+      category: categorize(probability),
+      daysDelayed,
+      bottleneck: false,
+    };
   });
+
+  return stageRisks.map((s) => ({
+    ...s,
+    bottleneck: s.stage === bottleneckStage,
+  }));
 }
 
-function buildRecommendations(p: Project, factors: RiskFactor[]): Recommendation[] {
-  const q = p.params;
+export function buildRecommendations(projectId: string, projectName: string, factors: RiskFactor[], params: RiskParameters): Recommendation[] {
   const out: Recommendation[] = [];
-  const top = factors.filter((f) => f.direction === "increases").slice(0, 4);
+  const top = factors.filter((f) => f.direction === "increases").slice(0, 5);
+
   let priority = 1;
   for (const f of top) {
-    let rec: Omit<Recommendation, "id" | "projectId" | "priority" | "status"> | null = null;
-    if (f.factor === "Legal disputes" && q.legalDisputes > 0) {
+    let rec: Omit<Recommendation, "id" | "projectId" | "priority" | "status" | "targetDriver"> | null = null;
+    let targetDriver = f.factor;
+
+    if (f.factor === "Legal disputes" && params.legalDisputes > 0) {
       rec = {
-        title: "Resolve pending legal disputes",
-        reason: `${q.legalDisputes} disputes are the largest single contributor (${f.contribution}%) to the current risk estimate.`,
-        action: `Convene a dispute resolution camp and escalate cases exceeding the defined resolution timeline to the district court cell.`,
-        impact: "Estimated 12–18 point reduction in risk score if disputes fall below 4.",
+        title: "Convene Special Lok Adalat & Fast-track Dispute Resolution",
+        reason: `${params.legalDisputes} disputes contribute ${f.contribution}% to predicted project delay.`,
+        action: "Convene a dedicated revenue-court Lok Adalat camp to resolve title disputes through pre-litigation mediation.",
+        impact: "Estimated 14–22 point reduction in risk score and 45–60 days delay mitigation.",
       };
-    } else if (f.factor === "Compensation delay" && q.compensationPct < 95) {
+    } else if (f.factor === "Compensation delay" && params.compensationPct < 95) {
       rec = {
-        title: "Accelerate compensation verification and disbursement",
-        reason: `Only ${q.compensationPct}% of compensation is disbursed, contributing ${f.contribution}% of the risk estimate.`,
-        action: "Deploy additional verification teams and clear pending award payments village-wise.",
-        impact: "Estimated 8–14 point reduction in risk score at 90% disbursal.",
+        title: "Deploy Additional Verification Officers & Clear Award Backlogs",
+        reason: `Compensation is only ${params.compensationPct}% disbursed, causing dissatisfaction and delay.`,
+        action: "Set up village-level direct bank transfer camps with dedicated revenue inspectors for instant account validation.",
+        impact: "Estimated 12–18 point reduction in risk score upon reaching 90% disbursement.",
       };
-    } else if (f.factor === "Pending approvals" && q.pendingApprovals > 0) {
+    } else if (f.factor === "Low possession progress" && params.possessionPct < 90) {
       rec = {
-        title: "Escalate pending statutory approvals",
-        reason: `${q.pendingApprovals} approvals remain pending, contributing ${f.contribution}% of the risk estimate.`,
-        action: "Raise a consolidated approval tracker with the nodal department and review weekly.",
-        impact: "Estimated 6–10 point reduction in risk score once approvals clear.",
+        title: "Accelerate Demarcation & Physical Possession Handover",
+        reason: `Possession is lagging at ${params.possessionPct}%, blocking subsequent infrastructure construction phases.`,
+        action: "Coordinate with district police and revenue surveyors for joint demarcation and peaceful possession drive.",
+        impact: "Estimated 10–16 point reduction in risk score as possession reaches 75%+.",
       };
-    } else if (f.factor === "Documentation gaps" && q.documentationPct < 95) {
+    } else if (f.factor === "Approval delay" && (params.approvalDelayDays > 30 || params.pendingApprovals > 0)) {
       rec = {
-        title: "Complete land record documentation",
-        reason: `${100 - q.documentationPct}% of land records remain unverified.`,
-        action: "Run a revenue-record reconciliation drive with the tehsil office.",
-        impact: "Estimated 4–8 point reduction in risk score.",
+        title: "Escalate Statutory Approvals to State Single-Window Cell",
+        reason: `Average approval delay of ${params.approvalDelayDays} days is impeding notification progression.`,
+        action: "Table pending clearances in the fortnightly Chief Secretary infrastructure monitoring review.",
+        impact: "Estimated 8–12 point reduction in risk score upon clearance of critical approvals.",
       };
-    } else if (f.factor === "R&R progress" && q.rrPct < 95) {
+    } else if (f.factor === "Documentation issues" && params.documentationPct < 90) {
       rec = {
-        title: "Advance rehabilitation & resettlement",
-        reason: `${q.rrPct}% of affected families have completed R&R.`,
-        action: "Prioritise displaced families awaiting allotment and publish an R&R schedule.",
-        impact: "Estimated 3–7 point reduction in risk score.",
+        title: "Conduct Record-of-Rights (RoR) Mutation & Digitization Drive",
+        reason: `${100 - params.documentationPct}% of land titles require verification and reconciliation.`,
+        action: "Deploy mobile tehsil units for on-spot mutation verification and digital land record integration.",
+        impact: "Estimated 6–10 point reduction in risk score.",
+      };
+    } else if (f.factor === "R&R challenges" && params.rrPct < 90) {
+      rec = {
+        title: "Expedite Resettlement Colony Amenities & Allotment Letters",
+        reason: `R&R progress (${params.rrPct}%) is below schedule, triggering stakeholder resistance.`,
+        action: "Complete civic infrastructure at rehabilitation sites and issue possession certificates to affected families.",
+        impact: "Estimated 7–11 point reduction in risk score.",
+      };
+    } else if (f.factor === "Stakeholder responsiveness") {
+      rec = {
+        title: "Establish Gram Sabha Consultation & Grievance Redressal Cell",
+        reason: `Stakeholder responsiveness is strained, leading to negotiation standoffs.`,
+        action: "Organize weekly public hearings with village leaders and district authorities.",
+        impact: "Estimated 5–9 point reduction in risk score.",
       };
     }
+
     if (rec) {
       out.push({
-        id: `${p.projectId}-REC-${priority}`,
-        projectId: p.id,
+        id: `${projectId}-REC-${priority}`,
+        projectId,
         priority: (priority > 3 ? 3 : priority) as 1 | 2 | 3,
         status: "Open",
+        targetDriver,
         ...rec,
       });
       priority += 1;
     }
-    if (out.length >= 3) break;
   }
+
+  // Fallback recommendation if clean
+  if (out.length === 0) {
+    out.push({
+      id: `${projectId}-REC-1`,
+      projectId,
+      priority: 1,
+      status: "Open",
+      targetDriver: "Maintenance",
+      title: "Maintain Bi-weekly Milestone Tracking",
+      reason: "Project parameters are currently within acceptable risk thresholds.",
+      action: "Continue routine monitoring of scheduled milestone deliveries across revenue and executing departments.",
+      impact: "Preserves stable low-risk trajectory.",
+    });
+  }
+
   return out;
 }
 
-/** Deterministic prediction engine — mirrors the POST /predict contract. */
-export function predict(p: Project, t: Thresholds = DEFAULT_THRESHOLDS): Prediction {
-  const parts = weighted(p);
-  const total = parts.reduce((s, x) => s + x.weight * x.value, 0);
-  const riskScore = Math.round(Math.min(100, Math.max(2, total)));
-  const delayProbability = Math.round(Math.min(97, Math.max(4, riskScore * 0.975)));
-  const expectedDelayDays = Math.round(riskScore * 1.8);
-  const sum = parts.reduce((s, x) => s + x.weight * x.value, 0) || 1;
+/** Core deterministic prediction calculation for any project or simulation parameters. */
+export function predictParameters(
+  params: RiskParameters,
+  projectId = "SIM-001",
+  projectName = "Simulation Project",
+  currentStage: Stage = "Legal Resolution",
+  thresholds: Thresholds = DEFAULT_THRESHOLDS,
+  version = MODEL_VERSION,
+): Prediction {
+  const parts = computeWeightedFactors(params);
+  const totalRaw = parts.reduce((s, x) => s + x.weight * x.value, 0);
+  const riskScore = Math.round(Math.min(100, Math.max(2, totalRaw)));
+  const delayProbability = Math.round(Math.min(98, Math.max(4, riskScore * 0.98)));
+  const expectedDelayDays = Math.round(riskScore * 2.2);
+  const expectedDelayMonths = Math.round((expectedDelayDays / 30) * 10) / 10;
+  const sumWeights = parts.reduce((s, x) => s + x.weight * x.value, 0) || 1;
 
   const factors: RiskFactor[] = parts
     .map((x) => ({
       factor: x.label,
+      category: x.category,
       raw: Math.round(x.weight * x.value * 10) / 10,
-      contribution: Math.round(((x.weight * x.value) / sum) * 100),
+      contribution: Math.round(((x.weight * x.value) / sumWeights) * 100),
       direction: (x.value > 0.35 ? "increases" : "reduces") as RiskFactor["direction"],
       detail: x.detail,
     }))
     .sort((a, b) => b.contribution - a.contribution);
 
+  const topDelayDrivers = factors.filter((f) => f.direction === "increases").slice(0, 5);
+  const stageRisks = computeStageRisks(params, riskScore);
+  const bottleneck = stageRisks.find((s) => s.bottleneck)?.stage ?? currentStage;
+  const recommendations = buildRecommendations(projectId, projectName, factors, params);
+  const stakeholderIndex = params.stakeholderBreakdown
+    ? computeStakeholderIndex(params.stakeholderBreakdown)
+    : params.stakeholderResponsiveness;
+
   return {
-    projectId: p.id,
+    projectId,
     riskScore,
     delayProbability,
     expectedDelayDays,
-    riskCategory: categorize(riskScore, t),
+    expectedDelayMonths,
+    riskCategory: categorize(riskScore, thresholds),
+    currentStage,
+    bottleneckStage: bottleneck,
+    topDelayDrivers,
     factors,
-    stageRisks: stageRiskFor(p, riskScore),
-    recommendations: buildRecommendations(p, factors),
-    modelVersion: MODEL_VERSION,
+    stageRisks,
+    recommendations,
+    modelVersion: version,
+    stakeholderIndex,
     createdAt: new Date().toISOString(),
   };
 }
 
+export function predict(p: Project, t: Thresholds = DEFAULT_THRESHOLDS, version = MODEL_VERSION): Prediction {
+  return predictParameters(p.params, p.id, p.name, p.currentStage, t, version);
+}
+
 export function overallProgress(p: Project): number {
   const active = p.stages.filter((s) => s.stage !== "Completion");
+  if (active.length === 0) return 100;
   return Math.round(active.reduce((s, x) => s + x.progress, 0) / active.length);
 }

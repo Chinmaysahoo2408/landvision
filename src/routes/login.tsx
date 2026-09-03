@@ -71,38 +71,100 @@ function LoginPage() {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="relative hidden flex-col justify-between border-r border-border bg-surface p-10 lg:flex">
-        <div className="grid-backdrop pointer-events-none absolute inset-0 opacity-40" aria-hidden />
-        <Link to="/" className="relative flex items-center gap-2">
-          <Globe2 className="size-5 text-primary" aria-hidden />
-          <span className="font-display text-sm font-bold tracking-widest text-foreground">LANDVISION AI</span>
-        </Link>
-        <div className="relative flex justify-center">
-          <HeroMap />
+      {/* LEFT SIDE: VISUAL & OVERLAY */}
+      <div className="relative hidden flex-col justify-between border-r border-border bg-surface p-10 lg:flex overflow-hidden">
+        <div className="grid-backdrop pointer-events-none absolute inset-0 opacity-50" aria-hidden />
+
+        {/* TOP BRANDING */}
+        <div className="relative z-10 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2.5">
+            <span className="grid size-9 place-items-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+              <Globe2 className="size-5" aria-hidden />
+            </span>
+            <div>
+              <span className="font-display text-base font-bold tracking-wider text-foreground">
+                LANDVISION AI
+              </span>
+              <span className="block text-[9px] font-semibold tracking-widest text-primary uppercase">
+                Government Infrastructure Portal
+              </span>
+            </div>
+          </Link>
+          <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold text-primary">
+            GIS Satellite & Cadastral Hub
+          </span>
         </div>
-        <p className="relative max-w-md text-sm text-muted-foreground">
-          Predict delays. Identify bottlenecks. Prioritize intervention. Accelerate infrastructure.
-        </p>
+
+        {/* CENTER GIS MAP VISUAL & OVERLAY */}
+        <div className="relative z-10 my-auto flex flex-col items-center justify-center">
+          <HeroMap />
+          
+          <div className="mt-6 w-full max-w-md rounded-xl border border-primary/30 bg-background/80 p-5 backdrop-blur shadow-xl text-center space-y-2">
+            <h2 className="font-display text-lg font-bold text-foreground tracking-wide">
+              LANDVISION AI
+            </h2>
+            <p className="text-sm font-medium text-primary italic">
+              "AI-powered intelligence for land acquisition and infrastructure projects."
+            </p>
+            <div className="pt-2 flex justify-center gap-4 text-[10px] text-muted-foreground uppercase font-semibold">
+              <span>• Odisha & National Jurisdiction</span>
+              <span>• Cadastral Risk Scoring</span>
+              <span>• FIR Analytics</span>
+            </div>
+          </div>
+        </div>
+
+        {/* BOTTOM HUD METRICS */}
+        <div className="relative z-10 grid grid-cols-3 gap-3 border-t border-border pt-4 text-xs text-muted-foreground">
+          <div>
+            <span className="block text-[10px] text-muted-foreground/70 uppercase">Jurisdiction</span>
+            <span className="font-semibold text-foreground">Odisha &amp; All-India</span>
+          </div>
+          <div>
+            <span className="block text-[10px] text-muted-foreground/70 uppercase">Parcels Monitored</span>
+            <span className="font-semibold text-foreground">5,842 Records</span>
+          </div>
+          <div>
+            <span className="block text-[10px] text-muted-foreground/70 uppercase">Security Level</span>
+            <span className="font-semibold text-foreground">Govt Encrypted</span>
+          </div>
+        </div>
       </div>
 
-      <div className="flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">
-          <div className="mb-8 flex items-center gap-2 lg:hidden">
-            <Globe2 className="size-5 text-primary" aria-hidden />
-            <span className="font-display text-sm font-bold tracking-widest text-foreground">LANDVISION AI</span>
-          </div>
-          <h1 className="font-display text-2xl font-bold text-foreground">Government portal sign in</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Authorised officials only. All actions in this portal are audit-logged.
-          </p>
-
-          <form onSubmit={submit} className="panel mt-6 space-y-4 p-6">
+      {/* RIGHT SIDE: CLEAN LOGIN PANEL */}
+      <div className="flex items-center justify-center bg-background px-6 py-12">
+        <div className="w-full max-w-md space-y-6">
+          <div className="flex items-center gap-3 lg:hidden">
+            <span className="grid size-9 place-items-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+              <Globe2 className="size-5" aria-hidden />
+            </span>
             <div>
-              <label htmlFor="email" className="text-xs font-medium text-muted-foreground">
-                Official email
+              <span className="font-display text-base font-bold tracking-wider text-foreground">
+                LANDVISION AI
+              </span>
+              <span className="block text-[9px] font-semibold tracking-widest text-primary uppercase">
+                Government Portal
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 rounded-md bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary border border-primary/20">
+              <ShieldCheck className="size-3.5" aria-hidden /> Secure National Gateway
+            </div>
+            <h1 className="font-display text-2xl font-bold text-foreground">Welcome back</h1>
+            <p className="text-sm text-muted-foreground">
+              Sign in to your LandVision AI official account to manage land acquisition, FIR analytics, and project risks.
+            </p>
+          </div>
+
+          <form onSubmit={submit} className="panel space-y-4 p-6 shadow-xl border-border">
+            <div>
+              <label htmlFor="email" className="text-xs font-semibold text-foreground">
+                Email / Username
               </label>
-              <div className="mt-1.5 flex items-center gap-2 rounded-md border border-border bg-background px-3">
-                <Mail className="size-4 text-muted-foreground" aria-hidden />
+              <div className="mt-1.5 flex items-center gap-2.5 rounded-lg border border-border bg-surface px-3 py-0.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+                <Mail className="size-4 text-muted-foreground shrink-0" aria-hidden />
                 <input
                   id="email"
                   type="email"
@@ -113,12 +175,13 @@ function LoginPage() {
                 />
               </div>
             </div>
+
             <div>
-              <label htmlFor="password" className="text-xs font-medium text-muted-foreground">
+              <label htmlFor="password" className="text-xs font-semibold text-foreground">
                 Password
               </label>
-              <div className="mt-1.5 flex items-center gap-2 rounded-md border border-border bg-background px-3">
-                <Lock className="size-4 text-muted-foreground" aria-hidden />
+              <div className="mt-1.5 flex items-center gap-2.5 rounded-lg border border-border bg-surface px-3 py-0.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+                <Lock className="size-4 text-muted-foreground shrink-0" aria-hidden />
                 <input
                   id="password"
                   type="password"
@@ -129,59 +192,66 @@ function LoginPage() {
                 />
               </div>
             </div>
-            <div className="flex items-center justify-between text-xs">
-              <label className="flex items-center gap-2 text-muted-foreground">
-                <input type="checkbox" className="size-3.5 accent-[var(--primary)]" /> Remember me
+
+            <div className="flex items-center justify-between text-xs pt-1">
+              <label className="flex items-center gap-2 text-muted-foreground cursor-pointer select-none">
+                <input type="checkbox" className="size-4 accent-primary rounded border-border" defaultChecked />
+                <span>Remember me</span>
               </label>
               <button
                 type="button"
-                onClick={() => toast.info("Password reset requests are handled by the state IT cell.")}
-                className="text-primary hover:underline"
+                onClick={() => toast.info("Password reset requests are processed by the State IT Cell.")}
+                className="font-medium text-primary hover:underline"
               >
-                Forgot password?
+                Forgot Password?
               </button>
             </div>
+
             {error ? (
-              <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive-foreground">
+              <p className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs font-medium text-destructive-foreground">
                 {error}
               </p>
             ) : null}
+
             <button
               type="submit"
               disabled={busy !== null}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[var(--shadow-glow)] disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 disabled:opacity-60 cursor-pointer"
             >
-              {busy ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null} Login
+              {busy ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+              <span>Login</span>
             </button>
           </form>
 
-          <div className="mt-6">
-            <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-              Demonstration accounts
+          {/* DEMO ACCOUNTS */}
+          <div className="space-y-3 pt-2 border-t border-border">
+            <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+              Quick Demonstration Accounts
             </p>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2 sm:grid-cols-2">
               {DEMO.map((d) => (
                 <button
                   key={d.role}
                   onClick={() => signIn(d.role)}
                   disabled={busy !== null}
-                  className="flex items-center justify-between gap-2 rounded-md border border-border bg-card px-3 py-2.5 text-left text-xs text-foreground transition-colors hover:border-primary/50 disabled:opacity-60"
+                  className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2.5 text-left text-xs text-foreground transition-colors hover:border-primary hover:bg-primary/5 disabled:opacity-60 cursor-pointer"
                 >
-                  <span>
-                    <span className="block font-semibold">{ROLE_LABEL[d.role]} Demo</span>
-                    <span className="text-muted-foreground">{d.email}</span>
+                  <span className="min-w-0">
+                    <span className="block font-semibold truncate">{ROLE_LABEL[d.role]}</span>
+                    <span className="text-[10px] text-muted-foreground truncate block">{d.email}</span>
                   </span>
-                  {busy === d.role ? <Loader2 className="size-3.5 animate-spin text-primary" aria-hidden /> : null}
+                  {busy === d.role ? <Loader2 className="size-3.5 animate-spin text-primary shrink-0" aria-hidden /> : null}
                 </button>
               ))}
             </div>
-            <p className="mt-4 flex items-start gap-2 text-xs text-muted-foreground">
-              <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
-              Demonstration environment. No real government credentials or citizen data are used.
-            </p>
-            <Link to="/public" className="mt-4 inline-block text-xs text-primary hover:underline">
-              Continue to the public portal instead →
-            </Link>
+            <div className="flex items-center justify-between pt-2 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="size-3.5 text-primary" /> Audit-Logged Portal
+              </span>
+              <Link to="/public" className="text-primary font-medium hover:underline">
+                Public Portal →
+              </Link>
+            </div>
           </div>
         </div>
       </div>

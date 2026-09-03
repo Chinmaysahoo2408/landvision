@@ -43,6 +43,8 @@ const ROLE_TONE: Record<Role, string> = {
   STATE_OFFICER: "bg-chart-2/15 text-foreground",
   DISTRICT_OFFICER: "bg-chart-4/15 text-foreground",
   DECISION_MAKER: "bg-chart-1/15 text-foreground",
+  ANALYST: "bg-chart-3/15 text-foreground",
+  PUBLIC_USER: "bg-muted text-muted-foreground",
 };
 
 function assignedCount(user: AppUser, projects: Project[]): number {
@@ -103,6 +105,7 @@ function UsersPage() {
     setUsers(users.map((u) => (u.id === user.id ? { ...u, status: next } : u)));
     log({
       user: session?.name ?? "System",
+      role: session?.role ?? "ADMIN",
       action:
         next === "Disabled"
           ? "Disabled user account"
@@ -111,6 +114,7 @@ function UsersPage() {
       entityId: user.email,
       oldValue: user.status,
       newValue: next,
+      status: "SUCCESS",
     });
     toast.success(`${user.name} is now ${next.toLowerCase()}.`);
   };

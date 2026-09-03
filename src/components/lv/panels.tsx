@@ -63,7 +63,7 @@ export function StatCard({
   search,
 }: {
   label: string;
-  value: number;
+  value: number | string;
   suffix?: string;
   hint?: string;
   icon: LucideIcon;
@@ -71,7 +71,8 @@ export function StatCard({
   to?: string;
   search?: Record<string, string>;
 }) {
-  const n = useCountUp(value);
+  const isNum = typeof value === "number";
+  const n = useCountUp(isNum ? value : 0);
   const toneClass = {
     default: "text-primary",
     low: "text-risk-low",
@@ -88,7 +89,7 @@ export function StatCard({
         <Icon className={cn("size-4", toneClass)} aria-hidden />
       </div>
       <p className="mt-3 font-display text-3xl font-bold text-foreground tabular-nums">
-        {n.toLocaleString("en-IN")}
+        {isNum ? n.toLocaleString("en-IN") : value}
         {suffix ? <span className="ml-0.5 text-xl text-muted-foreground">{suffix}</span> : null}
       </p>
       {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
