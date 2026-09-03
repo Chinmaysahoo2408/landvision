@@ -14,10 +14,8 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PublicRouteImport } from './routes/public'
 import { Route as AppIndexRouteImport } from './routes/app.index'
-import { Route as AppAdminAiRouteImport } from './routes/app.admin-ai'
 import { Route as AppAiPredictionRouteImport } from './routes/app.ai-prediction'
 import { Route as AppAlertsRouteImport } from './routes/app.alerts'
-import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
 import { Route as AppApiCenterRouteImport } from './routes/app.api-center'
 import { Route as AppAuditRouteImport } from './routes/app.audit'
 import { Route as AppBottlenecksRouteImport } from './routes/app.bottlenecks'
@@ -28,9 +26,7 @@ import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
 import { Route as AppDataRouteImport } from './routes/app.data'
 import { Route as AppDistrictAnalyticsRouteImport } from './routes/app.district-analytics'
 import { Route as AppDocumentationRouteImport } from './routes/app.documentation'
-import { Route as AppExplainableAiRouteImport } from './routes/app.explainable-ai'
 import { Route as AppGisRouteImport } from './routes/app.gis'
-import { Route as AppInsightsRouteImport } from './routes/app.insights'
 import { Route as AppInterventionsRouteImport } from './routes/app.interventions'
 import { Route as AppLandPriceRouteImport } from './routes/app.land-price'
 import { Route as AppLegalRouteImport } from './routes/app.legal'
@@ -82,11 +78,6 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAdminAiRoute = AppAdminAiRouteImport.update({
-  id: '/admin-ai',
-  path: '/admin-ai',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppAiPredictionRoute = AppAiPredictionRouteImport.update({
   id: '/ai-prediction',
   path: '/ai-prediction',
@@ -95,11 +86,6 @@ const AppAiPredictionRoute = AppAiPredictionRouteImport.update({
 const AppAlertsRoute = AppAlertsRouteImport.update({
   id: '/alerts',
   path: '/alerts',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
   getParentRoute: () => AppRoute,
 } as any)
 const AppApiCenterRoute = AppApiCenterRouteImport.update({
@@ -152,19 +138,9 @@ const AppDocumentationRoute = AppDocumentationRouteImport.update({
   path: '/documentation',
   getParentRoute: () => AppRoute,
 } as any)
-const AppExplainableAiRoute = AppExplainableAiRouteImport.update({
-  id: '/explainable-ai',
-  path: '/explainable-ai',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppGisRoute = AppGisRouteImport.update({
   id: '/gis',
   path: '/gis',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppInsightsRoute = AppInsightsRouteImport.update({
-  id: '/insights',
-  path: '/insights',
   getParentRoute: () => AppRoute,
 } as any)
 const AppInterventionsRoute = AppInterventionsRouteImport.update({
@@ -298,10 +274,8 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/public': typeof PublicRouteWithChildren
-  '/app/admin-ai': typeof AppAdminAiRoute
   '/app/ai-prediction': typeof AppAiPredictionRoute
   '/app/alerts': typeof AppAlertsRoute
-  '/app/analytics': typeof AppAnalyticsRoute
   '/app/api-center': typeof AppApiCenterRoute
   '/app/audit': typeof AppAuditRoute
   '/app/bottlenecks': typeof AppBottlenecksRoute
@@ -312,9 +286,7 @@ export interface FileRoutesByFullPath {
   '/app/data': typeof AppDataRoute
   '/app/district-analytics': typeof AppDistrictAnalyticsRoute
   '/app/documentation': typeof AppDocumentationRoute
-  '/app/explainable-ai': typeof AppExplainableAiRoute
   '/app/gis': typeof AppGisRoute
-  '/app/insights': typeof AppInsightsRoute
   '/app/interventions': typeof AppInterventionsRoute
   '/app/land-price': typeof AppLandPriceRoute
   '/app/legal': typeof AppLegalRoute
@@ -345,10 +317,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/app/admin-ai': typeof AppAdminAiRoute
   '/app/ai-prediction': typeof AppAiPredictionRoute
   '/app/alerts': typeof AppAlertsRoute
-  '/app/analytics': typeof AppAnalyticsRoute
   '/app/api-center': typeof AppApiCenterRoute
   '/app/audit': typeof AppAuditRoute
   '/app/bottlenecks': typeof AppBottlenecksRoute
@@ -359,9 +329,7 @@ export interface FileRoutesByTo {
   '/app/data': typeof AppDataRoute
   '/app/district-analytics': typeof AppDistrictAnalyticsRoute
   '/app/documentation': typeof AppDocumentationRoute
-  '/app/explainable-ai': typeof AppExplainableAiRoute
   '/app/gis': typeof AppGisRoute
-  '/app/insights': typeof AppInsightsRoute
   '/app/interventions': typeof AppInterventionsRoute
   '/app/land-price': typeof AppLandPriceRoute
   '/app/legal': typeof AppLegalRoute
@@ -395,10 +363,8 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/public': typeof PublicRouteWithChildren
-  '/app/admin-ai': typeof AppAdminAiRoute
   '/app/ai-prediction': typeof AppAiPredictionRoute
   '/app/alerts': typeof AppAlertsRoute
-  '/app/analytics': typeof AppAnalyticsRoute
   '/app/api-center': typeof AppApiCenterRoute
   '/app/audit': typeof AppAuditRoute
   '/app/bottlenecks': typeof AppBottlenecksRoute
@@ -409,9 +375,7 @@ export interface FileRoutesById {
   '/app/data': typeof AppDataRoute
   '/app/district-analytics': typeof AppDistrictAnalyticsRoute
   '/app/documentation': typeof AppDocumentationRoute
-  '/app/explainable-ai': typeof AppExplainableAiRoute
   '/app/gis': typeof AppGisRoute
-  '/app/insights': typeof AppInsightsRoute
   '/app/interventions': typeof AppInterventionsRoute
   '/app/land-price': typeof AppLandPriceRoute
   '/app/legal': typeof AppLegalRoute
@@ -446,10 +410,8 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/public'
-    | '/app/admin-ai'
     | '/app/ai-prediction'
     | '/app/alerts'
-    | '/app/analytics'
     | '/app/api-center'
     | '/app/audit'
     | '/app/bottlenecks'
@@ -460,9 +422,7 @@ export interface FileRouteTypes {
     | '/app/data'
     | '/app/district-analytics'
     | '/app/documentation'
-    | '/app/explainable-ai'
     | '/app/gis'
-    | '/app/insights'
     | '/app/interventions'
     | '/app/land-price'
     | '/app/legal'
@@ -493,10 +453,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
-    | '/app/admin-ai'
     | '/app/ai-prediction'
     | '/app/alerts'
-    | '/app/analytics'
     | '/app/api-center'
     | '/app/audit'
     | '/app/bottlenecks'
@@ -507,9 +465,7 @@ export interface FileRouteTypes {
     | '/app/data'
     | '/app/district-analytics'
     | '/app/documentation'
-    | '/app/explainable-ai'
     | '/app/gis'
-    | '/app/insights'
     | '/app/interventions'
     | '/app/land-price'
     | '/app/legal'
@@ -542,10 +498,8 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/public'
-    | '/app/admin-ai'
     | '/app/ai-prediction'
     | '/app/alerts'
-    | '/app/analytics'
     | '/app/api-center'
     | '/app/audit'
     | '/app/bottlenecks'
@@ -556,9 +510,7 @@ export interface FileRouteTypes {
     | '/app/data'
     | '/app/district-analytics'
     | '/app/documentation'
-    | '/app/explainable-ai'
     | '/app/gis'
-    | '/app/insights'
     | '/app/interventions'
     | '/app/land-price'
     | '/app/legal'
@@ -631,13 +583,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/admin-ai': {
-      id: '/app/admin-ai'
-      path: '/admin-ai'
-      fullPath: '/app/admin-ai'
-      preLoaderRoute: typeof AppAdminAiRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/app/ai-prediction': {
       id: '/app/ai-prediction'
       path: '/ai-prediction'
@@ -650,13 +595,6 @@ declare module '@tanstack/react-router' {
       path: '/alerts'
       fullPath: '/app/alerts'
       preLoaderRoute: typeof AppAlertsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/analytics': {
-      id: '/app/analytics'
-      path: '/analytics'
-      fullPath: '/app/analytics'
-      preLoaderRoute: typeof AppAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/api-center': {
@@ -729,25 +667,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDocumentationRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/explainable-ai': {
-      id: '/app/explainable-ai'
-      path: '/explainable-ai'
-      fullPath: '/app/explainable-ai'
-      preLoaderRoute: typeof AppExplainableAiRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/app/gis': {
       id: '/app/gis'
       path: '/gis'
       fullPath: '/app/gis'
       preLoaderRoute: typeof AppGisRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/insights': {
-      id: '/app/insights'
-      path: '/insights'
-      fullPath: '/app/insights'
-      preLoaderRoute: typeof AppInsightsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/interventions': {
@@ -929,10 +853,8 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
-  AppAdminAiRoute: typeof AppAdminAiRoute
   AppAiPredictionRoute: typeof AppAiPredictionRoute
   AppAlertsRoute: typeof AppAlertsRoute
-  AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppApiCenterRoute: typeof AppApiCenterRoute
   AppAuditRoute: typeof AppAuditRoute
   AppBottlenecksRoute: typeof AppBottlenecksRoute
@@ -943,9 +865,7 @@ interface AppRouteChildren {
   AppDataRoute: typeof AppDataRoute
   AppDistrictAnalyticsRoute: typeof AppDistrictAnalyticsRoute
   AppDocumentationRoute: typeof AppDocumentationRoute
-  AppExplainableAiRoute: typeof AppExplainableAiRoute
   AppGisRoute: typeof AppGisRoute
-  AppInsightsRoute: typeof AppInsightsRoute
   AppInterventionsRoute: typeof AppInterventionsRoute
   AppLandPriceRoute: typeof AppLandPriceRoute
   AppLegalRoute: typeof AppLegalRoute
@@ -966,10 +886,8 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppAdminAiRoute: AppAdminAiRoute,
   AppAiPredictionRoute: AppAiPredictionRoute,
   AppAlertsRoute: AppAlertsRoute,
-  AppAnalyticsRoute: AppAnalyticsRoute,
   AppApiCenterRoute: AppApiCenterRoute,
   AppAuditRoute: AppAuditRoute,
   AppBottlenecksRoute: AppBottlenecksRoute,
@@ -980,9 +898,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDataRoute: AppDataRoute,
   AppDistrictAnalyticsRoute: AppDistrictAnalyticsRoute,
   AppDocumentationRoute: AppDocumentationRoute,
-  AppExplainableAiRoute: AppExplainableAiRoute,
   AppGisRoute: AppGisRoute,
-  AppInsightsRoute: AppInsightsRoute,
   AppInterventionsRoute: AppInterventionsRoute,
   AppLandPriceRoute: AppLandPriceRoute,
   AppLegalRoute: AppLegalRoute,

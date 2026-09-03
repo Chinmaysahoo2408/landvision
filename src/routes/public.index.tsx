@@ -16,6 +16,7 @@ import { RiskBadge, useCountUp } from "@/components/lv/risk";
 import { useLV } from "@/lib/lv/store";
 import { overallProgress } from "@/lib/lv/risk";
 import { noticeFor } from "@/lib/lv/public";
+import { useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/public/")({
   head: () => ({
@@ -41,6 +42,7 @@ const FLAGSHIP = ["nh16", "rrc", "idz", "tcd", "uip"];
 
 function PublicHome() {
   const { visibleProjects, predictions } = useLV();
+  const { t, tStr } = useTranslation();
 
   const stats = useMemo(() => {
     const states = new Set(visibleProjects.map((p) => p.state));
@@ -72,14 +74,12 @@ function PublicHome() {
     return (picked.length ? picked : visibleProjects.slice(0, 5)).slice(0, 3);
   }, [visibleProjects]);
 
-  const notices = useMemo(
-    () =>
-      [...visibleProjects]
-        .map(noticeFor)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 4),
-    [visibleProjects],
-  );
+  const notices = useMemo(() => {
+    return [...visibleProjects]
+      .map(noticeFor)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 4);
+  }, [visibleProjects]);
 
   return (
     <div>
@@ -93,29 +93,29 @@ function PublicHome() {
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
               <Landmark className="size-3.5 text-primary" aria-hidden />
-              Land acquisition transparency portal
+              {tStr("Land acquisition transparency portal")}
             </span>
             <h1 className="mt-5 font-display text-4xl leading-tight font-bold text-foreground sm:text-5xl">
-              Track land acquisition{" "}
-              <span className="ai-gradient-text">in the open.</span>
+              {tStr("Track land acquisition")}{" "}
+              <span className="ai-gradient-text">{tStr("in the open.")}</span>
             </h1>
             <p className="mt-5 max-w-xl text-base text-muted-foreground">
-              Explore active land acquisition projects, follow their progress
-              stage by stage, read public notices and see aggregate statistics
-              across states and districts — all in one place.
+              {tStr(
+                "Explore active land acquisition projects, follow their progress stage by stage, read public notices and see aggregate statistics across states and districts — all in one place.",
+              )}
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 to="/public/projects"
                 className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-shadow hover:shadow-[var(--shadow-glow)]"
               >
-                Browse projects <ArrowRight className="size-4" aria-hidden />
+                {t.nav.projects} <ArrowRight className="size-4" aria-hidden />
               </Link>
               <Link
                 to="/public/map"
                 className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
               >
-                Open GIS map
+                {tStr("Open GIS map")}
               </Link>
             </div>
           </div>
@@ -127,29 +127,28 @@ function PublicHome() {
         <div className="relative mx-auto max-w-7xl px-4 pb-14 sm:px-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <PublicStat
-              label="Projects tracked"
+              label={t.dashboard.totalProjects}
               value={stats.projects}
               icon={Building2}
             />
             <PublicStat
-              label="States covered"
+              label={t.gis.allStates}
               value={stats.states}
               icon={MapPin}
             />
             <PublicStat
-              label="Districts"
+              label={tStr("Districts")}
               value={stats.districts}
               icon={MapPin}
             />
             <PublicStat
-              label="Families in scope"
+              label={tStr("Affected Families")}
               value={stats.families}
               icon={Users}
             />
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            <DemoTag /> Figures are demonstration values generated from a
-            synthetic dataset — not official government data.
+            <DemoTag /> {tStr("Figures are demonstration values generated from a synthetic dataset — not official government data.")}
           </p>
         </div>
       </section>

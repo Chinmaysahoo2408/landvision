@@ -36,6 +36,7 @@ import { HeroMap } from "@/components/lv/HeroMap";
 import { DemoTag, Panel } from "@/components/lv/panels";
 import { useCountUp } from "@/components/lv/risk";
 import { STAGES } from "@/lib/lv/types";
+import { LanguageSelector, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -74,8 +75,8 @@ const NAV = [
 ];
 
 const METRICS = [
-  { label: "Corridors Monitored", value: 1248 },
-  { label: "High/Critical Risk Corridors", value: 184 },
+  { label: "Monitored Corridors", value: 1248 },
+  { label: "High Risk Corridors", value: 184 },
   { label: "Peak Delay Risk Index", value: 82, suffix: "%" },
   { label: "Active Interventions", value: 23 },
 ];
@@ -98,39 +99,39 @@ const STAGE_DETAIL: Record<string, { desc: string; bottleneck: string; indicator
     indicator: "Approvals pending at State Revenue Cell beyond 30-day SLA.",
   },
   Survey: {
-    desc: "Cadastral field survey, joint demarcation and measurement of affected land parcels.",
-    bottleneck: "Survey team shortages, inaccessible terrain and missing boundary records.",
-    indicator: "Documentation & RoR verification below 70%.",
+    desc: "Joint measurement survey (JMS) and drone-based boundary validation of project parcels.",
+    bottleneck: "Landowner objections, unmapped boundary disputes, and disputed mutation entries.",
+    indicator: "JMS variance exceeding 12% across revenue subdivisions.",
   },
   Valuation: {
-    desc: "Determination of market value, multiplier factor, and preparation of draft award statement.",
-    bottleneck: "Disputed circle rates and outdated registered transaction baselines.",
-    indicator: "Objections filed before District Valuation Committee.",
+    desc: "District Collectorate determines market rate base, multiplier factor & 100% solatium.",
+    bottleneck: "Disputed circle rates, pending registration data updates, and tree/structure valuation appeals.",
+    indicator: "Circle rate appeals pending before Revenue Divisional Commissioner (RDC).",
   },
   Compensation: {
-    desc: "Statutory award declaration and direct benefit transfer (DBT) disbursement to landholders.",
-    bottleneck: "Stalled bank accounts, unlinked Aadhaar/PAN and disputed co-sharer titles.",
-    indicator: "Disbursal stalled beyond 45-day statutory timeline.",
+    desc: "Direct Benefit Transfer (DBT) disbursal into verified bank accounts of project-affected persons.",
+    bottleneck: "Unlinked Aadhaar/PAN, title partition disputes among legal heirs, and joint holding ambiguity.",
+    indicator: "Disbursal velocity below 40% after 90 days of statutory award declaration.",
   },
   "Legal Resolution": {
-    desc: "Adjudication of Section 64 reference petitions, High Court writ petitions, and stay motions.",
-    bottleneck: "Court backlogs, multiple heirship claimants and stayed possession orders.",
-    indicator: "Active dispute count rising quarter over quarter.",
+    desc: "Land Acquisition, Rehabilitation and Resettlement Authority (LARRA) & High Court case adjudication.",
+    bottleneck: "Interim stay orders, conflicting title claims, and compensation enhancement suits.",
+    indicator: "Active stay orders with hearing dates scheduled beyond 60-day window.",
   },
-  "Rehabilitation & Resettlement": {
-    desc: "Execution of R&R scheme, civic infrastructure at resettlement colonies, and livelihood grants.",
-    bottleneck: "Colony site readiness, contractor delays, and family entitlement verification.",
-    indicator: "R&R completion lagging compensation progress by >40%.",
+  "R&R": {
+    desc: "Resettlement and rehabilitation package: alternative housing, land-for-land, and annuity grants.",
+    bottleneck: "Delay in developing R&R colony infrastructure and community objection to relocation sites.",
+    indicator: "R&R site handover lagging behind infrastructure corridor civil work schedule.",
   },
   Possession: {
-    desc: "Physical land possession handed over from Revenue Authorities to Executing Agency.",
-    bottleneck: "Encroachment removal, standing crop compensation and law-and-order issues.",
-    indicator: "Possession percentage significantly trailing awarded compensation.",
+    desc: "Section 38 physical possession of unencumbered land handed over to project implementing agency.",
+    bottleneck: "Crop standing issues, delayed tree felling clearances, and pending structural demolitions.",
+    indicator: "Encumbrance certificates pending clearance by Special Land Acquisition Officer (SLAO).",
   },
   Completion: {
-    desc: "Final acquisition closure, land title mutation in favor of Government, and audit sign-off.",
-    bottleneck: "Pending Tehsil mutation entries and residual escrow reconciliations.",
-    indicator: "Residual contested parcels preventing commercial construction start.",
+    desc: "Final revenue record mutation in RoR (Record of Rights) in favour of Central/State authority.",
+    bottleneck: "Tehsil-level record reconciliation delays and digital cadastral map updates.",
+    indicator: "Digitized RoR issuance pending post physical handover.",
   },
 };
 
@@ -147,6 +148,7 @@ const FEATURES = [
 ];
 
 function Landing() {
+  const { tStr } = useTranslation();
   const [stage, setStage] = useState<string>("Legal Resolution");
   const detail = STAGE_DETAIL[stage]!;
 
@@ -172,7 +174,7 @@ function Landing() {
                   to={n.to}
                   className="text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {n.label}
+                  {tStr(n.label)}
                 </Link>
               ) : (
                 <a
@@ -180,23 +182,24 @@ function Landing() {
                   href={n.href}
                   className="text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {n.label}
+                  {tStr(n.label)}
                 </a>
               ),
             )}
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <LanguageSelector />
             <Link
               to="/login"
               className="rounded-md border border-border px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-card"
             >
-              Officer Login
+              {tStr("Officer Login")}
             </Link>
             <Link
               to="/app/dashboard"
               className="rounded-md bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground shadow-sm hover:shadow-[var(--shadow-glow)]"
             >
-              Command Center →
+              {tStr("Overview Dashboard")} →
             </Link>
           </div>
         </div>
@@ -212,8 +215,8 @@ function Landing() {
               AI Decision-Support System for Infrastructure Delivery
             </span>
             <h1 className="mt-5 font-display text-4xl leading-tight font-bold text-foreground sm:text-5xl">
-              Predicting Land Acquisition Delays{" "}
-              <span className="ai-gradient-text">Before They Happen.</span>
+              {tStr("Predicting Land Acquisition Delays")}{" "}
+              <span className="ai-gradient-text">{tStr("Before They Happen.")}</span>
             </h1>
             <p className="mt-5 max-w-xl text-sm text-muted-foreground leading-relaxed">
               LandVision AI combines multi-parameter predictive analytics, transparent SHAP explainability, and cadastral GIS
@@ -224,13 +227,13 @@ function Landing() {
                 to="/app/dashboard"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-xs font-bold text-primary-foreground shadow-lg transition-shadow hover:shadow-[var(--shadow-glow)]"
               >
-                Launch National Command Center <ArrowRight className="size-4" aria-hidden />
+                {tStr("Launch National Command Center")} <ArrowRight className="size-4" aria-hidden />
               </Link>
               <Link
                 to="/app/predictor"
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-xs font-bold text-foreground transition-colors hover:bg-accent"
               >
-                <Zap className="size-4 text-primary" /> Test AI Predictor Sandbox
+                <Zap className="size-4 text-primary" /> {tStr("Test AI Predictor Sandbox")}
               </Link>
               <Link
                 to="/public/methodology"
@@ -252,7 +255,7 @@ function Landing() {
         <div className="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {METRICS.map((m) => (
-              <Metric key={m.label} {...m} />
+              <Metric key={m.label} label={tStr(m.label)} value={m.value} suffix={m.suffix} />
             ))}
           </div>
           <div className="mt-4 flex items-center justify-between">
@@ -466,7 +469,7 @@ function SectionHead({ eyebrow, title, text }: { eyebrow: string; title: string;
   );
 }
 
-function Metric({ label, value, suffix }: { label: string; value: number; suffix?: string }) {
+function Metric({ label, value, suffix }: { label: string; value: number; suffix?: string | undefined }) {
   const n = useCountUp(value, 1200);
   return (
     <div className="panel p-4">

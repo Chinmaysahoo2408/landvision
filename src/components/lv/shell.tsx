@@ -2,7 +2,6 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Activity,
   AlertTriangle,
-  BarChart3,
   Bell,
   Brain,
   Building2,
@@ -43,9 +42,11 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
+import { DATA_SOURCE } from "@/lib/lv/dataSource";
 import { ROLE_LABEL, useLV } from "@/lib/lv/store";
 import type { Role } from "@/lib/lv/types";
 import { cn } from "@/lib/utils";
+import { LanguageSelector, useTranslation } from "@/lib/i18n";
 
 interface NavItem {
   to: string;
@@ -78,9 +79,6 @@ const NAV_GROUPS: NavGroup[] = [
       { to: "/app/district-analytics", label: "District Analytics", icon: MapPin },
       { to: "/app/state-analytics", label: "State Analytics", icon: Building2 },
       { to: "/app/compare", label: "Multi-Compare Tool", icon: GitCompare },
-      { to: "/app/insights", label: "AI Portfolio Insights", icon: Brain },
-      { to: "/app/explainable-ai", label: "Explainable AI (XAI)", icon: Scale },
-      { to: "/app/analytics", label: "Benchmarking", icon: BarChart3 },
     ],
   },
   {
@@ -116,7 +114,6 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "Administration",
     items: [
-      { to: "/app/admin-ai", label: "Admin AI / ML Center", icon: Cpu, roles: ["ADMIN"] },
       { to: "/app/users", label: "Users & Roles", icon: Users, roles: ["ADMIN"] },
       { to: "/app/audit", label: "Audit Trails", icon: ScrollText, roles: ["ADMIN"] },
       { to: "/app/settings", label: "System Settings", icon: Settings },
@@ -126,6 +123,7 @@ const NAV_GROUPS: NavGroup[] = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { session, logout, alerts, ready } = useLV();
+  const { tStr } = useTranslation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -141,7 +139,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="grid min-h-screen place-items-center bg-background">
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
           <span className="size-2 animate-pulse rounded-full bg-primary" />
-          Verifying secure government session…
+          {tStr("Verifying secure government session…")}
         </div>
       </div>
     );
@@ -169,7 +167,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 LANDVISION AI
               </span>
               <span className="block text-[9px] font-medium tracking-widest text-primary uppercase">
-                National Command Center
+                {tStr("National Command Center")}
               </span>
             </div>
           </Link>
@@ -193,7 +191,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             return (
               <div key={group.title} className="space-y-1">
                 <p className="px-3 text-[10px] font-semibold tracking-wider text-muted-foreground/80 uppercase">
-                  {group.title}
+                  {tStr(group.title)}
                 </p>
                 <ul className="space-y-0.5">
                   {visibleItems.map((item) => (
@@ -208,13 +206,13 @@ export function AppShell({ children }: { children: ReactNode }) {
                         }}
                         activeOptions={{ exact: item.to === "/app/dashboard" }}
                       >
-                        <span className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2.5">
                           <item.icon className="size-4 shrink-0" aria-hidden />
-                          <span>{item.label}</span>
-                        </span>
-                        {item.to === "/app/alerts" && unreadAlerts > 0 ? (
-                          <span className="grid size-4.5 place-items-center rounded-full bg-risk-critical text-[10px] font-bold text-white">
-                            {unreadAlerts}
+                          <span>{tStr(item.label)}</span>
+                        </div>
+                        {item.badge ? (
+                          <span className="rounded-full bg-primary/20 px-1.5 py-0.2 text-[9px] font-bold text-primary dark:text-primary-foreground">
+                            {item.badge}
                           </span>
                         ) : null}
                       </Link>
@@ -270,7 +268,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   navigate({ to: "/login" });
                 }}
                 className="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
-                title="Sign out"
+                title={tStr("Sign out")}
               >
                 <LogOut className="size-3.5" />
               </button>
@@ -301,17 +299,18 @@ export function AppShell({ children }: { children: ReactNode }) {
             </button>
             <div className="hidden items-center gap-2 rounded-md border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground sm:flex">
               <span className="size-2 animate-pulse rounded-full bg-primary" aria-hidden />
-              <span>AI Engine Active · Synthetic Data Demonstration</span>
+              <span>AI Engine Active · {DATA_SOURCE.label}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
+            <LanguageSelector />
             <Link
               to="/app/predictor"
               className="hidden items-center gap-1.5 rounded-md bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary border border-primary/20 hover:bg-primary/15 sm:inline-flex"
             >
               <Sparkles className="size-3.5" />
-              Predict Delay Risk
+              {tStr("Predict Delay Risk")}
             </Link>
             <Link
               to="/app/alerts"

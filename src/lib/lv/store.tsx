@@ -8,10 +8,13 @@ import {
   type ReactNode,
 } from "react";
 import type {
+  ActiveModelConfig,
   Alert,
   AppUser,
   AuditEntry,
+  DatasetConfig,
   Intervention,
+  ModelVersionItem,
   Prediction,
   Project,
   Recommendation,
@@ -28,6 +31,115 @@ import {
   seedAlerts,
   SEED_AUDIT,
 } from "./data";
+import {
+  getSessionUser,
+  isSupabaseConfigured,
+  onAuthChange,
+  signOut as supabaseSignOut,
+} from "@/lib/supabase/auth";
+
+export const INITIAL_DATASET_CONFIG: DatasetConfig = {
+  filename: "landvision_ml_train_1757.csv",
+  version: "v1.0",
+  totalRows: 1757,
+  totalColumns: 14,
+  numericalColumns: [
+    "Land_Required_Hectare",
+    "Land_Remaining_Hectare",
+    "Affected_Families",
+    "Compensation_Amount",
+    "Project_Cost",
+  ],
+  categoricalColumns: [
+    "State",
+    "District",
+    "Project_Type",
+    "Legal_Dispute",
+    "Court_Case",
+    "Environmental_Clearance",
+    "Forest_Clearance",
+    "Rehabilitation_Issue",
+  ],
+  missingPct: 0.0,
+  duplicateRows: 0,
+  qualityScore: 98,
+  lastUpdated: "2026-09-03 12:30",
+  isReady: true,
+  source: "Admin AI / ML Data Center",
+  preview: [
+    { State: "Karnataka", District: "Chamarajanagar", Project_Type: "Port Development", Land_Required_Hectare: 107.88, Land_Remaining_Hectare: 48.87, Affected_Families: 817, Compensation_Amount: 1717257924.0, Project_Cost: 1498.96, Legal_Dispute: "Yes", Court_Case: "Yes", Environmental_Clearance: "Pending", Forest_Clearance: "Under Review", Rehabilitation_Issue: "No", Overall_Delay: 1143 },
+    { State: "Andhra Pradesh", District: "West Godavari", Project_Type: "Mining Project", Land_Required_Hectare: 703.02, Land_Remaining_Hectare: 29.84, Affected_Families: 2188, Compensation_Amount: 5122457962.0, Project_Cost: 1962.18, Legal_Dispute: "No", Court_Case: "No", Environmental_Clearance: "Not Required", Forest_Clearance: "Obtained", Rehabilitation_Issue: "No", Overall_Delay: 457 },
+    { State: "Assam", District: "Biswanath", Project_Type: "State Highway", Land_Required_Hectare: 359.5, Land_Remaining_Hectare: 241.83, Affected_Families: 4745, Compensation_Amount: 10392940192.0, Project_Cost: 12493.69, Legal_Dispute: "No", Court_Case: "No", Environmental_Clearance: "Obtained", Forest_Clearance: "Not Required", Rehabilitation_Issue: "No", Overall_Delay: 417 },
+    { State: "Andhra Pradesh", District: "Chittoor", Project_Type: "Power Plant", Land_Required_Hectare: 406.76, Land_Remaining_Hectare: 316.77, Affected_Families: 1864, Compensation_Amount: 5647015286.0, Project_Cost: 5386.86, Legal_Dispute: "Yes", Court_Case: "Yes", Environmental_Clearance: "Not Required", Forest_Clearance: "Obtained", Rehabilitation_Issue: "No", Overall_Delay: 1710 },
+    { State: "Arunachal Pradesh", District: "Kra Daadi", Project_Type: "State Highway", Land_Required_Hectare: 240.88, Land_Remaining_Hectare: 6.03, Affected_Families: 2295, Compensation_Amount: 5914719546.0, Project_Cost: 7083.29, Legal_Dispute: "Yes", Court_Case: "Yes", Environmental_Clearance: "Pending", Forest_Clearance: "Not Required", Rehabilitation_Issue: "Yes", Overall_Delay: 1217 },
+  ],
+  stats: {
+    Land_Required_Hectare: { mean: 428.6, median: 416.0, min: 6.1, max: 798.4 },
+    Affected_Families: { mean: 3782, median: 2940, min: 16, max: 12058 },
+    Overall_Delay: { mean: 685.4, median: 558.0, min: 46, max: 2217 },
+  },
+};
+
+export const INITIAL_ACTIVE_MODEL: ActiveModelConfig = {
+  modelName: "XGBoost Regressor / Random Forest Classifier",
+  version: "v1.0",
+  status: "Trained",
+  algorithm: "Ensemble Auto-Select (XGBoost + Random Forest)",
+  lastTrained: "2026-09-03 12:30",
+  accuracy: 94.2,
+  precision: 93.8,
+  recall: 94.2,
+  f1Score: 94.0,
+  mae: 18.4,
+  rmse: 24.1,
+  r2: 0.87,
+  trainingRows: 1757,
+  targetColumns: ["Overall_Delay", "Risk_Level"],
+  activeVersions: {
+    Overall_Delay: "v1.0",
+    Risk_Level: "v1.0",
+  },
+  comparison: {
+    "XGBoost Regressor": { mae: 18.4, rmse: 24.1, r2: 0.87 },
+    "Random Forest Regressor": { mae: 24.3, rmse: 31.8, r2: 0.78 },
+    "Gradient Boosting Regressor": { mae: 21.7, rmse: 28.5, r2: 0.82 },
+    "Linear Regression (Baseline)": { mae: 46.2, rmse: 58.9, r2: 0.54 },
+  },
+};
+
+export const INITIAL_MODEL_VERSIONS: ModelVersionItem[] = [
+  {
+    target: "Overall_Delay",
+    version: "v1.0",
+    algorithm: "XGBoost Regressor",
+    training_rows: 1757,
+    metrics: { mae: 18.4, rmse: 24.1, r2: 0.87 },
+    created_at: "2026-09-03 12:30",
+    is_active: true,
+    comparison: {
+      "XGBoost Regressor": { mae: 18.4, rmse: 24.1, r2: 0.87 },
+      "Random Forest Regressor": { mae: 24.3, rmse: 31.8, r2: 0.78 },
+      "Gradient Boosting Regressor": { mae: 21.7, rmse: 28.5, r2: 0.82 },
+      "Linear Regression (Baseline)": { mae: 46.2, rmse: 58.9, r2: 0.54 },
+    },
+  },
+  {
+    target: "Risk_Level",
+    version: "v1.0",
+    algorithm: "Random Forest Classifier",
+    training_rows: 1757,
+    metrics: { accuracy: 94.2, precision: 93.8, recall: 94.2, f1Score: 94.0 },
+    created_at: "2026-09-03 12:30",
+    is_active: true,
+  },
+];
+
+export const INITIAL_SYSTEM_LOGS = [
+  { id: "LOG-01", timestamp: "2026-09-02 23:20:14", level: "SUCCESS", message: "FastAPI ML Service online on http://127.0.0.1:8000 (Python 3.13 / XGBoost 3.4.1 / scikit-learn 1.8.0)." },
+  { id: "LOG-02", timestamp: "2026-09-02 23:18:25", level: "INFO", message: "Pre-trained model artifacts validated (v1.2 active across all 5 targets)." },
+  { id: "LOG-03", timestamp: "2026-09-02 22:45:10", level: "INFO", message: "Dataset quality audit completed: 25,420 records, 0 critical schema errors." },
+  { id: "LOG-04", timestamp: "2026-09-02 21:30:00", level: "SUCCESS", message: "Automated model evaluation selected XGBoost Regressor for Overall_Delay with R²=0.87, MAE=18.4 days." },
+];
 
 interface Persisted {
   projects: Project[];
@@ -40,6 +152,10 @@ interface Persisted {
   recStatus: Record<string, Recommendation["status"]>;
   modelVersion: string;
   retrainingHistory: RetrainingLog[];
+  datasetConfig: DatasetConfig;
+  activeModel: ActiveModelConfig;
+  modelVersions: ModelVersionItem[];
+  systemLogs: Array<{ id: string; timestamp: string; level: string; message: string }>;
 }
 
 const KEY = "landvision.state.v2";
@@ -88,10 +204,16 @@ function buildInitial(): Persisted {
     audit: SEED_AUDIT,
     users: DEMO_USERS,
     thresholds: DEFAULT_THRESHOLDS,
-    session: DEMO_USERS[0] ?? null,
+    // In demo mode we pre-select an admin so the app is explorable; with a real
+    // backend configured, the session starts empty and Supabase auth fills it.
+    session: isSupabaseConfigured ? null : (DEMO_USERS[0] ?? null),
     recStatus: {},
     modelVersion: MODEL_VERSION,
     retrainingHistory: RETRAINING_HISTORY,
+    datasetConfig: INITIAL_DATASET_CONFIG,
+    activeModel: INITIAL_ACTIVE_MODEL,
+    modelVersions: INITIAL_MODEL_VERSIONS,
+    systemLogs: INITIAL_SYSTEM_LOGS,
   };
 }
 
@@ -103,6 +225,7 @@ interface Ctx extends Persisted {
   predictionFor: (projectId: string) => Prediction | undefined;
   login: (role: Role) => AppUser | null;
   logout: () => void;
+  setSession: (u: AppUser | null) => void;
   visibleProjects: Project[];
   updateProject: (id: string, patch: Partial<Project>, note?: string) => void;
   addProject: (p: Project) => void;
@@ -115,6 +238,11 @@ interface Ctx extends Persisted {
   retrainModel: () => Promise<RetrainingLog>;
   predictCustom: (params: RiskParameters, name?: string) => Prediction;
   log: (e: Omit<AuditEntry, "id" | "timestamp">) => void;
+  updateDatasetConfig: (patch: Partial<DatasetConfig>) => void;
+  updateActiveModel: (patch: Partial<ActiveModelConfig>) => void;
+  activateModelVersion: (target: string, version: string) => void;
+  addModelVersion: (item: ModelVersionItem) => void;
+  addSystemLog: (level: string, message: string) => void;
 }
 
 const StoreContext = createContext<Ctx | null>(null);
@@ -123,6 +251,20 @@ export function LandVisionProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<Persisted>(() => buildInitial());
   const [ready, setReady] = useState(false);
   const [selectedState, setSelectedState] = useState("Odisha");
+
+  // Stable, idempotent session setter. Returning the previous state object when
+  // nothing meaningful changed lets React bail out of re-rendering, which keeps
+  // the Supabase auth subscription (below) from looping.
+  const setSession = useCallback((u: AppUser | null) => {
+    setState((s) => {
+      const cur = s.session;
+      const unchanged =
+        (cur?.id ?? null) === (u?.id ?? null) &&
+        (cur?.status ?? null) === (u?.status ?? null) &&
+        (cur?.lastLogin ?? "") === (u?.lastLogin ?? "");
+      return unchanged ? s : { ...s, session: u };
+    });
+  }, []);
 
   useEffect(() => {
     try {
@@ -135,6 +277,13 @@ export function LandVisionProvider({ children }: { children: ReactNode }) {
           projects: parsed.projects?.length ? parsed.projects : s.projects,
           interventions: parsed.interventions?.length ? parsed.interventions : s.interventions,
           retrainingHistory: parsed.retrainingHistory?.length ? parsed.retrainingHistory : s.retrainingHistory,
+          datasetConfig: parsed.datasetConfig ? { ...s.datasetConfig, ...parsed.datasetConfig } : s.datasetConfig,
+          activeModel: parsed.activeModel ? { ...s.activeModel, ...parsed.activeModel } : s.activeModel,
+          modelVersions: parsed.modelVersions?.length ? parsed.modelVersions : s.modelVersions,
+          systemLogs: parsed.systemLogs?.length ? parsed.systemLogs : s.systemLogs,
+          // With a real backend, ignore any persisted session — Supabase auth is
+          // the source of truth and restores it in the effect below.
+          session: isSupabaseConfigured ? null : (parsed.session ?? s.session),
         }));
       }
     } catch {
@@ -154,17 +303,40 @@ export function LandVisionProvider({ children }: { children: ReactNode }) {
           audit: state.audit,
           users: state.users,
           thresholds: state.thresholds,
-          session: state.session,
+          session: isSupabaseConfigured ? null : state.session,
           recStatus: state.recStatus,
           projects: state.projects,
           modelVersion: state.modelVersion,
           retrainingHistory: state.retrainingHistory,
+          datasetConfig: state.datasetConfig,
+          activeModel: state.activeModel,
+          modelVersions: state.modelVersions,
+          systemLogs: state.systemLogs,
         }),
       );
     } catch {
       /* storage full or unavailable — state stays in memory */
     }
   }, [state, ready]);
+
+  // Real-backend session ownership: when Supabase is configured it — not the
+  // demo picker — drives the session. Restore any existing session on mount and
+  // keep it in sync with sign-in / sign-out events. No-op in demo mode.
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+    let active = true;
+    let unsubscribe = () => {};
+    void (async () => {
+      const current = await getSessionUser();
+      if (!active) return;
+      setSession(current);
+      unsubscribe = onAuthChange((next) => setSession(next));
+    })();
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, [setSession]);
 
   const predictions = useMemo(() => {
     const m = new Map<string, Prediction>();
@@ -287,6 +459,108 @@ export function LandVisionProvider({ children }: { children: ReactNode }) {
     return newLog;
   }, [state.projects.length, state.retrainingHistory, state.modelVersion]);
 
+  const updateDatasetConfig = useCallback((patch: Partial<DatasetConfig>) => {
+    setState((s) => ({
+      ...s,
+      datasetConfig: {
+        ...s.datasetConfig,
+        ...patch,
+        lastUpdated: patch.lastUpdated || new Date().toISOString().replace("T", " ").slice(0, 16),
+      },
+      audit: [
+        {
+          id: `au-${Date.now()}`,
+          user: s.session?.name ?? "Admin",
+          role: s.session?.role ?? "ADMIN",
+          action: "Updated central AI dataset configuration",
+          entity: "Dataset",
+          entityId: patch.filename ?? s.datasetConfig.filename,
+          oldValue: `${s.datasetConfig.totalRows} rows`,
+          newValue: `${patch.totalRows ?? s.datasetConfig.totalRows} rows`,
+          timestamp: new Date().toISOString(),
+          status: "SUCCESS",
+        },
+        ...s.audit,
+      ],
+    }));
+  }, []);
+
+  const updateActiveModel = useCallback((patch: Partial<ActiveModelConfig>) => {
+    setState((s) => ({
+      ...s,
+      activeModel: {
+        ...s.activeModel,
+        ...patch,
+        lastTrained: patch.lastTrained || new Date().toISOString().replace("T", " ").slice(0, 16),
+      },
+      modelVersion: patch.version || s.modelVersion,
+      audit: [
+        {
+          id: `au-${Date.now()}`,
+          user: s.session?.name ?? "Admin",
+          role: s.session?.role ?? "ADMIN",
+          action: "Updated central active ML model configuration",
+          entity: "ML Model",
+          entityId: patch.modelName ?? s.activeModel.modelName,
+          oldValue: s.activeModel.version,
+          newValue: patch.version ?? s.activeModel.version,
+          timestamp: new Date().toISOString(),
+          status: "SUCCESS",
+        },
+        ...s.audit,
+      ],
+    }));
+  }, []);
+
+  const activateModelVersion = useCallback((target: string, version: string) => {
+    setState((s) => {
+      const updatedVersions = s.modelVersions.map((mv) => ({
+        ...mv,
+        is_active: mv.target === target ? mv.version === version : mv.is_active,
+      }));
+      const targetModel = updatedVersions.find((mv) => mv.target === target && mv.version === version);
+      return {
+        ...s,
+        modelVersions: updatedVersions,
+        activeModel: {
+          ...s.activeModel,
+          version: target === "Overall_Delay" ? version : s.activeModel.version,
+          activeVersions: {
+            ...s.activeModel.activeVersions,
+            [target]: version,
+          },
+          algorithm: targetModel?.algorithm || s.activeModel.algorithm,
+          mae: targetModel?.metrics?.mae ?? s.activeModel.mae,
+          rmse: targetModel?.metrics?.rmse ?? s.activeModel.rmse,
+          r2: targetModel?.metrics?.r2 ?? s.activeModel.r2,
+          accuracy: targetModel?.metrics?.accuracy ?? s.activeModel.accuracy,
+        },
+      };
+    });
+  }, []);
+
+  const addModelVersion = useCallback((item: ModelVersionItem) => {
+    setState((s) => ({
+      ...s,
+      modelVersions: [item, ...s.modelVersions],
+    }));
+  }, []);
+
+  const addSystemLog = useCallback((level: string, message: string) => {
+    setState((s) => ({
+      ...s,
+      systemLogs: [
+        {
+          id: `LOG-${Date.now()}`,
+          timestamp: new Date().toISOString().replace("T", " ").slice(0, 19),
+          level,
+          message,
+        },
+        ...s.systemLogs.slice(0, 99),
+      ],
+    }));
+  }, []);
+
   const predictCustom = useCallback(
     (params: RiskParameters, name = "Custom Simulation") => {
       return predictParameters(params, "SIM-CUSTOM", name, "Legal Resolution", state.thresholds, state.modelVersion);
@@ -329,7 +603,12 @@ export function LandVisionProvider({ children }: { children: ReactNode }) {
       }
       return user;
     },
-    logout: () => setState((s) => ({ ...s, session: null })),
+    logout: () => {
+      // Clear locally for instant UX, and end the real session if one exists.
+      if (isSupabaseConfigured) void supabaseSignOut();
+      setState((s) => ({ ...s, session: null }));
+    },
+    setSession,
     updateProject: (id, patch, note) => {
       setState((s) => {
         const before = s.projects.find((p) => p.id === id);
@@ -395,6 +674,11 @@ export function LandVisionProvider({ children }: { children: ReactNode }) {
     retrainModel,
     predictCustom,
     log,
+    updateDatasetConfig,
+    updateActiveModel,
+    activateModelVersion,
+    addModelVersion,
+    addSystemLog,
   };
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

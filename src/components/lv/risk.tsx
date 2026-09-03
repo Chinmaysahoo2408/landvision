@@ -3,30 +3,42 @@ import { useEffect, useState } from "react";
 import type { RiskCategory } from "@/lib/lv/types";
 import { cn } from "@/lib/utils";
 
-const styles: Record<RiskCategory, { bg: string; text: string; ring: string; stroke: string }> = {
+export const STATUTORY_RISK_HEX: Record<RiskCategory | "UNKNOWN", string> = {
+  LOW: "#16A34A",
+  MEDIUM: "#EAB308",
+  HIGH: "#F87171",
+  CRITICAL: "#B91C1C",
+  UNKNOWN: "#9CA3AF",
+};
+
+const styles: Record<RiskCategory, { bg: string; text: string; ring: string; stroke: string; hex: string }> = {
   LOW: {
-    bg: "bg-risk-low/12",
-    text: "text-risk-low",
-    ring: "ring-risk-low/40",
-    stroke: "var(--risk-low)",
+    bg: "bg-emerald-500/15",
+    text: "text-emerald-700 dark:text-emerald-400",
+    ring: "ring-emerald-500/40",
+    stroke: "#16A34A",
+    hex: "#16A34A",
   },
   MEDIUM: {
-    bg: "bg-risk-medium/12",
-    text: "text-risk-medium",
-    ring: "ring-risk-medium/40",
-    stroke: "var(--risk-medium)",
+    bg: "bg-amber-500/15",
+    text: "text-amber-700 dark:text-amber-400",
+    ring: "ring-amber-500/40",
+    stroke: "#EAB308",
+    hex: "#EAB308",
   },
   HIGH: {
-    bg: "bg-risk-high/12",
-    text: "text-risk-high",
-    ring: "ring-risk-high/40",
-    stroke: "var(--risk-high)",
+    bg: "bg-rose-400/15",
+    text: "text-rose-600 dark:text-rose-400",
+    ring: "ring-rose-400/40",
+    stroke: "#F87171",
+    hex: "#F87171",
   },
   CRITICAL: {
-    bg: "bg-risk-critical/16",
-    text: "text-risk-critical",
-    ring: "ring-risk-critical/50",
-    stroke: "var(--risk-critical)",
+    bg: "bg-rose-700/20",
+    text: "text-rose-700 dark:text-rose-300",
+    ring: "ring-rose-700/50",
+    stroke: "#B91C1C",
+    hex: "#B91C1C",
   },
 };
 
@@ -37,8 +49,17 @@ const icons: Record<RiskCategory, typeof AlertTriangle> = {
   CRITICAL: ShieldAlert,
 };
 
-export function riskStyle(category: RiskCategory) {
-  return styles[category];
+export function riskStyle(category: RiskCategory | "UNKNOWN") {
+  if (category === "UNKNOWN" || !styles[category as RiskCategory]) {
+    return {
+      bg: "bg-slate-500/15",
+      text: "text-slate-600 dark:text-slate-400",
+      ring: "ring-slate-400/40",
+      stroke: "#9CA3AF",
+      hex: "#9CA3AF",
+    };
+  }
+  return styles[category as RiskCategory];
 }
 
 export function RiskBadge({

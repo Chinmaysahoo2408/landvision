@@ -20,6 +20,7 @@ import { RiskBadge, RiskGauge } from "@/components/lv/risk";
 import { useLV } from "@/lib/lv/store";
 import type { Prediction, ProjectType, RiskParameters, Stage } from "@/lib/lv/types";
 import { PROJECT_TYPES, STAGES } from "@/lib/lv/types";
+import { useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/app/predictor")({
   component: PredictorPage,
@@ -68,6 +69,7 @@ const DEFAULT_PARAMS: RiskParameters = {
 
 function PredictorPage() {
   const { predictCustom, projects, addIntervention, session } = useLV();
+  const { tStr, formatNumberIndian } = useTranslation();
   const [params, setParams] = useState<RiskParameters>(DEFAULT_PARAMS);
   const [stage, setStage] = useState<Stage>("Legal Resolution");
   const [projectName, setProjectName] = useState("NH-16 6-Lane Expansion Corridor");

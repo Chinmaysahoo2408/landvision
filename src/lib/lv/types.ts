@@ -364,3 +364,60 @@ export interface FirTrainingPipelineStep {
   progressPct: number;
 }
 
+export interface DatasetConfig {
+  filename: string;
+  version: string;
+  totalRows: number;
+  totalColumns: number;
+  numericalColumns: string[];
+  categoricalColumns: string[];
+  missingPct: number;
+  duplicateRows: number;
+  qualityScore: number;
+  lastUpdated: string;
+  isReady: boolean;
+  preview: Array<Record<string, any>>;
+  stats: Record<string, { mean?: number; median?: number; min?: number; max?: number }>;
+  source: string;
+}
+
+export interface ModelMetrics {
+  mae?: number;
+  rmse?: number;
+  r2?: number;
+  accuracy?: number;
+  precision?: number;
+  recall?: number;
+  f1Score?: number;
+}
+
+export interface ModelVersionItem {
+  target: string;
+  version: string;
+  algorithm: string;
+  training_rows: number;
+  metrics: ModelMetrics;
+  created_at: string;
+  is_active: boolean;
+  comparison?: Record<string, ModelMetrics>;
+}
+
+export interface ActiveModelConfig {
+  modelName: string;
+  version: string;
+  status: "Trained" | "Training" | "Evaluating" | "Ready";
+  algorithm: string;
+  lastTrained: string;
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  mae: number;
+  rmse: number;
+  r2: number;
+  trainingRows: number;
+  targetColumns: string[];
+  activeVersions: Record<string, string>;
+  comparison?: Record<string, ModelMetrics>;
+}
+

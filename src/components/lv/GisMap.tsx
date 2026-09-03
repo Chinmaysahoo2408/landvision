@@ -25,6 +25,7 @@ export function GisMap(props: {
   showParcels?: boolean;
   showHeat?: boolean;
   publicMode?: boolean;
+  baseLayer?: "light" | "dark" | "satellite" | "osm";
   height?: string;
 }) {
   const height = props.height ?? "560px";

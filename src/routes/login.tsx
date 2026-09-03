@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Globe2, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { ROLE_LABEL, useLV } from "@/lib/lv/store";
+import { isSupabaseConfigured, signIn as supabaseSignIn } from "@/lib/supabase/auth";
 import type { Role } from "@/lib/lv/types";
 import { HeroMap } from "@/components/lv/HeroMap";
 
@@ -33,14 +34,15 @@ const DEMO: { role: Role; email: string }[] = [
 ];
 
 function LoginPage() {
-  const { login, users } = useLV();
+  const { login, users, setSession } = useLV();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState("");
 
-  const signIn = (role: Role) => {
+  // Demo sign-in — used only when no real backend is configured.
+  const demoSignIn = (role: Role) => {
     setBusy(role);
     setError("");
     window.setTimeout(() => {
@@ -55,8 +57,31 @@ function LoginPage() {
     }, 550);
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    if (isSupabaseConfigured) {
+      // Real authentication against Supabase; roles/permissions are enforced
+      // server-side by Row Level Security regardless of this UI.
+      if (!email.trim() || !password) {
+        setError("Enter your email and password.");
+        return;
+      }
+      setBusy("form");
+      const { user, error: authError } = await supabaseSignIn(email.trim(), password);
+      setBusy(null);
+      if (authError || !user) {
+        setError(authError ?? "Unable to sign in. Please check your credentials.");
+        return;
+      }
+      setSession(user);
+      toast.success(`Signed in as ${user.name || ROLE_LABEL[user.role]}`);
+      navigate({ to: "/app/dashboard" });
+      return;
+    }
+
+    // Demo mode: match a demonstration account by email.
     const match = users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
     if (!match) {
       setError("We could not find an account with that email address.");
@@ -66,7 +91,7 @@ function LoginPage() {
       setError("Please enter your password (minimum 4 characters for this demonstration).");
       return;
     }
-    signIn(match.role);
+    demoSignIn(match.role);
   };
 
   return (
@@ -223,27 +248,31 @@ function LoginPage() {
             </button>
           </form>
 
-          {/* DEMO ACCOUNTS */}
+          {/* DEMO ACCOUNTS — shown only when no real backend is configured */}
           <div className="space-y-3 pt-2 border-t border-border">
-            <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-              Quick Demonstration Accounts
-            </p>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {DEMO.map((d) => (
-                <button
-                  key={d.role}
-                  onClick={() => signIn(d.role)}
-                  disabled={busy !== null}
-                  className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2.5 text-left text-xs text-foreground transition-colors hover:border-primary hover:bg-primary/5 disabled:opacity-60 cursor-pointer"
-                >
-                  <span className="min-w-0">
-                    <span className="block font-semibold truncate">{ROLE_LABEL[d.role]}</span>
-                    <span className="text-[10px] text-muted-foreground truncate block">{d.email}</span>
-                  </span>
-                  {busy === d.role ? <Loader2 className="size-3.5 animate-spin text-primary shrink-0" aria-hidden /> : null}
-                </button>
-              ))}
-            </div>
+            {!isSupabaseConfigured ? (
+              <>
+                <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                  Quick Demonstration Accounts
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {DEMO.map((d) => (
+                    <button
+                      key={d.role}
+                      onClick={() => demoSignIn(d.role)}
+                      disabled={busy !== null}
+                      className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2.5 text-left text-xs text-foreground transition-colors hover:border-primary hover:bg-primary/5 disabled:opacity-60 cursor-pointer"
+                    >
+                      <span className="min-w-0">
+                        <span className="block font-semibold truncate">{ROLE_LABEL[d.role]}</span>
+                        <span className="text-[10px] text-muted-foreground truncate block">{d.email}</span>
+                      </span>
+                      {busy === d.role ? <Loader2 className="size-3.5 animate-spin text-primary shrink-0" aria-hidden /> : null}
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : null}
             <div className="flex items-center justify-between pt-2 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="size-3.5 text-primary" /> Audit-Logged Portal

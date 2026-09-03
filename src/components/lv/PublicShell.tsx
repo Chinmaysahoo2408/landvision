@@ -3,23 +3,8 @@ import { ArrowRight, Globe2, Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-
-interface PublicNavItem {
-  to: string;
-  label: string;
-  exact?: boolean;
-}
-
-const NAV: PublicNavItem[] = [
-  { to: "/public", label: "Home", exact: true },
-  { to: "/public/projects", label: "Projects" },
-  { to: "/public/map", label: "GIS Map" },
-  { to: "/public/notices", label: "Notices" },
-  { to: "/public/statistics", label: "Statistics" },
-  { to: "/public/methodology", label: "SIH Methodology" },
-  { to: "/public/impact", label: "Impact" },
-  { to: "/public/about", label: "About" },
-];
+import { SampleDataBanner } from "./panels";
+import { LanguageSelector, useTranslation } from "@/lib/i18n";
 
 const LINK_BASE =
   "rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground";
@@ -29,6 +14,18 @@ const LINK_ACTIVE =
 export function PublicShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { t } = useTranslation();
+
+  const NAV = [
+    { to: "/public", label: t.nav.dashboard, exact: true },
+    { to: "/public/projects", label: t.nav.projects },
+    { to: "/public/map", label: t.nav.gis },
+    { to: "/public/notices", label: t.nav.documentation },
+    { to: "/public/statistics", label: t.dashboard.totalProjects },
+    { to: "/public/methodology", label: "SIH Methodology" },
+    { to: "/public/impact", label: "Impact" },
+    { to: "/public/about", label: "About" },
+  ];
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -42,7 +39,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
               LANDVISION AI
             </span>
             <span className="hidden rounded-full border border-border bg-card px-2 py-0.5 text-[10px] font-medium tracking-wide text-muted-foreground uppercase sm:inline">
-              Public Portal
+              {t.nav.publicPortal}
             </span>
           </Link>
 
@@ -60,12 +57,13 @@ export function PublicShell({ children }: { children: ReactNode }) {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <LanguageSelector />
             <Link
               to="/login"
               className="hidden items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-card sm:inline-flex"
             >
-              Government Login
+              {t.nav.login}
             </Link>
             <button
               className="lg:hidden"
@@ -108,6 +106,8 @@ export function PublicShell({ children }: { children: ReactNode }) {
           </nav>
         ) : null}
       </header>
+
+      <SampleDataBanner />
 
       <main className="flex-1">{children}</main>
 
